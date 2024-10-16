@@ -1,11 +1,12 @@
 import { Alert } from '@mui/material';
 import axios from 'axios';
 import { Dispatch } from 'redux';
+import { REGISTER_SUCCESS } from './registerActions';
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
-
+export const LOGOUT = 'LOGOUT';
 
 const validateEmail = (email: string) => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,6 +33,10 @@ export const loginUser = (email: string, password: string,navigate: any) => {
           }
         }
       );
+
+      const token = response.data.token;
+      localStorage.setItem('authToken',token);
+      dispatch({type:REGISTER_SUCCESS,payload:response.data})
       alert('Login successfully')
       navigate('/projects')
       dispatch({ type: LOGIN_SUCCESS, payload: response.data });
@@ -40,5 +45,13 @@ export const loginUser = (email: string, password: string,navigate: any) => {
     }
   };
 };
+
+export const logoutUser = (navigate: any) => {
+  return (dispatch: Dispatch) => {
+    localStorage.removeItem('authToken')
+    dispatch({type: LOGOUT})
+    navigate('/login')
+  }
+}
 
 export default loginUser;

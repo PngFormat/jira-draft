@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -19,14 +19,18 @@ function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const authToken = localStorage.getItem('authToken')
+
+  useEffect(()=> {
+    if(authToken){
+      navigate('/projects')
+    }
+  },[navigate])
 
   const handleLogin = async () => {
     dispatch(loginUser(email,password,navigate));
-    setEmail('');
-    setPassword('');
   };
 
-  
 
   return (
     <Container maxWidth="sm">

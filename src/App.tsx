@@ -6,21 +6,26 @@ import Registration from '../src/screens/RegistrationPage'
 import AuthPage from '../src/screens/AuthPage';
 import './App.css'
 import ProjectPage from './screens/ProjectPage';
+import PrivateRoute from './privateRoute/PrivateRoute';
 
 
 function App() {
-
   return (
-   <Router>
-      <nav className='App'>
-      
-      </nav>
-   
+    <Router>
+    
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/registration" element={<Registration />} />
-        <Route path="/projects" element={<ProjectPage/>} />
+
+        <Route 
+        path="/projects" 
+        element={
+        <PrivateRoute> 
+          <ProjectPage/>
+          </PrivateRoute>
+        }
+        />
       </Routes>
     </Router>
   );
