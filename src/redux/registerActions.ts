@@ -1,45 +1,32 @@
 import { Alert } from '@mui/material';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Dispatch } from 'redux';
 
-export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-export const REGISTER_REQUEST = 'REGISTER_REQUEST';
-export const REGISTER_FAILURE = 'REGISTER_FAILURE';
+const validateEmail = (email: string) =>  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-const validateEmail = (email: string) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
+const validatePassword = (password: string) => /^(?=.*[A-Za-z]).{6,32}$/.test(password);
 
-  const validatePassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Za-z]).{6,32}$/;
-    return passwordPattern.test(password);
-  };
-  const validateUsername = (username: string) => {
-    const passwordPattern = /[A-Za-z]/;
-    return passwordPattern.test(username);
-  };
+const validateUsername = (username: string) => /[A-Za-z]/.test(username);
 
-export const registerUser = (email:string, name: string, password:string,confirmPassword: string) => {
-    return async (dispatch: Dispatch) => {
-        dispatch({type: REGISTER_REQUEST});
+export const registerUser = createAsyncThunk (
+    'auth/registerUser',
+    async ({email,name,password,confirmPassword}: {email: string,name:string, password: string,confirmPassword: string }, thunkAPI) => {
 
         if (!validateEmail(email)) {
-            dispatch({type: REGISTER_FAILURE,payload: 'Invalid email format'})
-            return;
+            return thunkAPI.rejectWithValue('Invalid email format')
         }
 
         if(!validateUsername(name)){
-            dispatch({type: REGISTER_FAILURE,payload: 'Username must be filled!'})
-            return;
+            return thunkAPI.rejectWithValue( 'Username must be filled!')
         }
         if(password !== confirmPassword) {
-            dispatch({type: REGISTER_FAILURE,payload: 'Password do not match'})
-            return;
+            return thunkAPI.rejectWithValue( 'Password do not match')
+
         }
         
         if(!validatePassword(password)){
-            dispatch({type: REGISTER_FAILURE,payload: 'The password must contain letters and be between 8 and 32 characters long'})
+            thunkAPI.rejectWithValue( 'The password must contain letters and be between 8 and 32 characters long')
             return;
         }
 
@@ -48,14 +35,11 @@ export const registerUser = (email:string, name: string, password:string,confirm
                 {email,name,password}, 
                 { headers: {'Content-Type': 'application/json'}}
             );
+            return response.data;
 
-                dispatch({type: REGISTER_SUCCESS, payload: response.data})
         }catch(error:any) {
-            dispatch({
-                type: REGISTER_FAILURE,
-                payload: error.response.data.message 
-            });
+            return thunkAPI.rejectWithValue(error.response?.data?.message || 'Registration failed')
             
         }
     }
-}
+)

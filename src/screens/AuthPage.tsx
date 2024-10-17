@@ -7,12 +7,6 @@ import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import {loginUser} from '../redux/authActions';
 import { AppDispatch } from '../redux/store';
 
-interface User {
-  id: number;
-  login: string;
-  password: string;
-}
-
 function AuthPage() {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,9 +22,11 @@ function AuthPage() {
   },[navigate])
 
   const handleLogin = async () => {
-    dispatch(loginUser(email,password,navigate));
+    const result = await dispatch(loginUser({email,password}));
+    if(loginUser.fulfilled.match(result)){
+      navigate('/projects')
+    }
   };
-
 
   return (
     <Container maxWidth="sm">

@@ -19,11 +19,13 @@ function RegistrationPage() {
   const [role, setRole] = useState<boolean>(false);
 
   const handleRegister = async () => {
-   
-      dispatch(registerUser(email, password, username,confirmPassword));
-      setMessage('Registration successful!');
-      alert(message);
-      navigate('/login');
+    const result = await dispatch(registerUser({email, password, name: username,confirmPassword}));
+    if (registerUser.rejected.match(result)) {
+
+      alert(result.payload);
+    } else {
+      alert('Registration successful!');
+    }
   };
   
   const navigate = useNavigate();
@@ -93,7 +95,6 @@ function RegistrationPage() {
     
        sx={{ mt: 1 }}
        onClick={() => {navigate('/login')}}>Go to Sign In</Button>
-      {message && <p>{message}</p>}
     </Box>
     </Container>
   );
