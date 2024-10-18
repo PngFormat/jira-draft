@@ -22,3 +22,8 @@ export interface IRegisterState {
   error: string | null
 }
 
+export interface IProject {
+  title:string;
+  description:string;
+}
+

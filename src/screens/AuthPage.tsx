@@ -25,12 +25,15 @@ function AuthPage() {
     const result = await dispatch(loginUser({email,password}));
     if(loginUser.fulfilled.match(result)){
       navigate('/projects')
+      const authToken = localStorage.getItem('authToken')
+
+      console.log(authToken)
     }
   };
 
   return (
     <Container maxWidth="sm">
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 5 }}>
       <Typography variant="h4" gutterBottom>
         Sign In
       </Typography>
@@ -44,7 +47,7 @@ function AuthPage() {
           helperText={error}
         />
     
-    <p></p>
+    
     <TextField
           label="Password"
           variant="outlined"
@@ -56,14 +59,15 @@ function AuthPage() {
         />
     
     <Button
-      variant="outlined"
+      variant="contained"
     
-     sx={{ mt: 1 }}
+     sx={{ mt: 1,width:"220px" }}
+     
      onClick={handleLogin}>SignIn</Button>
     <Button
-     variant="outlined"
+     variant="contained"
     
-     sx={{ mt: 1 }}
+     sx={{ mt: 1,width:"220px" }}
      onClick= {() => { navigate('/registration')}}>Go to SignUp</Button>
       </Box>
     </Container>

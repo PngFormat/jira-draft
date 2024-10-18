@@ -7,12 +7,11 @@ import AuthPage from '../src/screens/AuthPage';
 import './App.css'
 import ProjectPage from './screens/ProjectPage';
 import PrivateRoute from './privateRoute/PrivateRoute';
-
+import CreateProject from './components/CreateProject';
 
 function App() {
   return (
     <Router>
-    
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<AuthPage />} />
@@ -24,6 +23,15 @@ function App() {
         <PrivateRoute> 
           <ProjectPage/>
           </PrivateRoute>
+        }
+        />
+
+      <Route 
+        path="/projects/create" 
+        element={
+        <PrivateRoute> 
+          <CreateProject/>
+        </PrivateRoute>
         }
         />
       </Routes>

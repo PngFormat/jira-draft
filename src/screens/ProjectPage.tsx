@@ -11,6 +11,8 @@ function ProjectPage() {
   const handleLogout = () => {
     dispatch(logoutUser(navigate))
   }
+
+
   return (
     <div className="App">
       <h1>Projects</h1>
@@ -18,7 +20,13 @@ function ProjectPage() {
       variant="outlined"
       sx={{ mt: 1 }}
       onClick={handleLogout}>LogOut</Button>
+
+      <Button
+      variant="outlined"
+      sx={{ mt: 1 }}
+      onClick={() => navigate('/projects/create')}>Create project</Button>
       
+
     
     </div>
   );
