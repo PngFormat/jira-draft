@@ -15,11 +15,11 @@ function AuthPage() {
   const [error, setError] = useState('');
   const authToken = localStorage.getItem('authToken')
 
-  useEffect(()=> {
-    if(authToken){
-      navigate('/projects')
-    }
-  },[navigate])
+  // useEffect(()=> {
+  //   if(authToken){
+  //     navigate('/projects')
+  //   }
+  // },[navigate])
 
   const handleLogin = async () => {
     const result = await dispatch(loginUser({email,password}));

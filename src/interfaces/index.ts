@@ -27,3 +27,29 @@ export interface IProject {
   description:string;
 }
 
+export interface CreateProjectProps {
+  handleCreate: (title: string, description: string) => void;
+}
+
+export interface ProjectPageProps {
+  projects: IProject[];  
+}
+
+export interface Project {
+  title:string,
+  description:string,
+}
+
+export interface ProjectState {
+  projects: Project[];
+  loading: boolean,
+  error: string | null;
+}
+
+export const initialState: ProjectState = {
+  projects: [],
+  loading: false,
+  error: null,
+}
+
+

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from '../src/screens/Home';
 import { useNavigate } from 'react-router-dom';
@@ -7,9 +8,19 @@ import AuthPage from '../src/screens/AuthPage';
 import './App.css'
 import ProjectPage from './screens/ProjectPage';
 import PrivateRoute from './privateRoute/PrivateRoute';
-import CreateProject from './components/CreateProject';
+import CreateProject from './components/Project/CreateProject';
+import { IProject } from './interfaces';
 
 function App() {
+    const [projects, setProjects] = useState<IProject[]>([]);
+
+
+  const handleCreateProject = (title: string, description: string) => {
+    console.log('Project Created:', title, description);
+    setProjects((prevProjects) => [...prevProjects, {title,description}])
+
+  };
+  
   return (
     <Router>
       <Routes>
@@ -21,7 +32,7 @@ function App() {
         path="/projects" 
         element={
         <PrivateRoute> 
-          <ProjectPage/>
+          <ProjectPage projects={projects} />
           </PrivateRoute>
         }
         />
@@ -30,7 +41,7 @@ function App() {
         path="/projects/create" 
         element={
         <PrivateRoute> 
-          <CreateProject/>
+          <CreateProject handleCreate={handleCreateProject}/>
         </PrivateRoute>
         }
         />

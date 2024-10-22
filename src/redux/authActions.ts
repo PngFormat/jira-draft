@@ -12,17 +12,12 @@ const validateEmail = (email: string) => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailPattern.test(email);
 };
-// (email: string, password: string,navigate: any)
 export const loginUser = createAsyncThunk (
-  // return async (dispatch: Dispatch) => {
     'auth/login',
     async({email,password }: { email: string, password: string }, thunkAPI:any) => {
       if(!validateEmail) {  
-        // dispatch({type: LOGIN_FAILURE, payload: 'Invalid email format'})
-        // alert('Invalid email format')
         return thunkAPI.isRejectedWithValue('Invalid email format');
       }
-      // dispatch({ type: LOGIN_REQUEST });
       try {
         const response = await axios.post(
           'https://nodejs-jira-pet-project.onrender.com/api/users/login',
