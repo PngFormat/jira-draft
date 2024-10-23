@@ -19,14 +19,12 @@ function AuthPage() {
   //   if(authToken){
   //     navigate('/projects')
   //   }
-  // },[navigate])
+  // },[authToken])
 
   const handleLogin = async () => {
     const result = await dispatch(loginUser({email,password}));
     if(loginUser.fulfilled.match(result)){
       navigate('/projects')
-      const authToken = localStorage.getItem('authToken')
-
       console.log(authToken)
     }
   };

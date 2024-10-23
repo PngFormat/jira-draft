@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
@@ -16,17 +16,27 @@ function RegistrationPage() {
   const [username, setUsername] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [role, setRole] = useState<boolean>(false);
+  const [role, setRole] = useState<string>('USER');
 
   const handleRegister = async () => {
-    const result = await dispatch(registerUser({email, password, name: username,confirmPassword}));
+    const result = await dispatch(registerUser({email, password, name: username,confirmPassword,role}));
     if (registerUser.rejected.match(result)) {
-
-      alert(result.payload);
-    } else {
+      alert(result.payload);  
+      setError(result.payload as string);
+    } else if (registerUser.fulfilled.match(result)) {
       alert('Registration successful!');
+      setError('');  
+      navigate('/login'); 
     }
   };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRole(e.target.checked ? 'ADMIN' : 'USER');  
+  };
+
+  useEffect(() => {
+    console.log(role)
+  },[role])
   
   const navigate = useNavigate();
 
@@ -80,7 +90,8 @@ function RegistrationPage() {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <input 
           type='checkbox'  
-          onChange={(e) => setRole((prevRole => !prevRole))} 
+          onChange={handleCheckboxChange} 
+          checked={role === 'ADMIN'}
         />
         <p>Sign up as Admin</p>
       </div>

@@ -12,14 +12,7 @@ import CreateProject from './components/Project/CreateProject';
 import { IProject } from './interfaces';
 
 function App() {
-    const [projects, setProjects] = useState<IProject[]>([]);
-
-
-  const handleCreateProject = (title: string, description: string) => {
-    console.log('Project Created:', title, description);
-    setProjects((prevProjects) => [...prevProjects, {title,description}])
-
-  };
+ 
   
   return (
     <Router>
@@ -32,7 +25,7 @@ function App() {
         path="/projects" 
         element={
         <PrivateRoute> 
-          <ProjectPage projects={projects} />
+          <ProjectPage />
           </PrivateRoute>
         }
         />
@@ -41,7 +34,7 @@ function App() {
         path="/projects/create" 
         element={
         <PrivateRoute> 
-          <CreateProject handleCreate={handleCreateProject}/>
+          <CreateProject/>
         </PrivateRoute>
         }
         />

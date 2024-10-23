@@ -31,6 +31,7 @@ export const loginUser = createAsyncThunk (
         );
 
         const token = response.data.token;
+        const user = response.data.user;
         localStorage.setItem('authToken',token);
         alert('Login successfully')
         localStorage.setItem('authToken', token)
@@ -43,7 +44,8 @@ export const loginUser = createAsyncThunk (
 
 export const logoutUser = (navigate: any) => {
   return (dispatch: Dispatch) => {
-    localStorage.removeItem('authToken')
+    localStorage.removeItem('authToken'); 
+    localStorage.removeItem('user');
     dispatch({type: LOGOUT})
     navigate('/login')
   }

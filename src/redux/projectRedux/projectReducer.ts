@@ -1,11 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice,PayloadAction } from "@reduxjs/toolkit"
 import { ProjectState } from "../../interfaces"
-import { createProject } from "./projectActions"
+import { createProject,fetchProjects } from "./projectActions"
+import { Project } from "../../interfaces"
 
 export const initialState: ProjectState = {
     projects: [],
     loading: false,
-    error: null,
+    error: null || '',
 }
 
 export const projectSlice = createSlice({
@@ -14,18 +15,30 @@ export const projectSlice = createSlice({
     reducers:{},
     extraReducers: (builder) => {
         builder
-        .addCase(createProject.pending,(state) => {
+        .addCase(createProject.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
-        .addCase(createProject.fulfilled,(state,action) =>{
+        .addCase(createProject.fulfilled, (state, action: PayloadAction<Project>) => {
             state.loading = false;
             state.projects.push(action.payload);
         })
-        .addCase(createProject.rejected, (state,action) => {
+        .addCase(createProject.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string; 
+        })
+        .addCase(fetchProjects.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(fetchProjects.fulfilled, (state, action: PayloadAction<Project[]>) => {
+            state.loading = false;
+            state.projects = action.payload;
+        })
+        .addCase(fetchProjects.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
-        })
+        });
         
     }
 

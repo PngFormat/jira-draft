@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
+localStorage.removeItem('user')
 
 function Home() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function Home() {
       <div> 
       <br/>
       <button onClick={() => navigate('/login')}>Авторизация</button>
-        <button>Регистрация</button>
+        <button onClick={() => navigate('/registration')}>Регистрация</button>
       </div>
     </div>
   );

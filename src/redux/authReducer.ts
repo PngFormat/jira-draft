@@ -1,61 +1,50 @@
 import { createSlice } from '@reduxjs/toolkit';
 import loginUser from './authActions';
 import { logoutUser } from './authActions';
-import { IAuthState,IAction } from '../interfaces';
+import { IAuthState } from '../interfaces';
 
+const storedToken = localStorage.getItem('authToken') || null;
 
 const initialState: IAuthState = {
-  token:null,
-  user:null,
+  token: storedToken,
+  user:  null, 
   loading: false,
   error: '',
 };
 
 
 const authSlice = createSlice({
-  name:'auth',
+  name: 'auth',
   initialState,
-  reducers:{
+  reducers: {
     LOGOUT: (state) => {
       state.user = null;
-      state.token = null
-    }
+      state.token = null;
+      localStorage.removeItem('authToken'); 
+      localStorage.removeItem('user'); 
+    },
   },
-  extraReducers:(builder) => {
+  extraReducers: (builder) => {
     builder
-    .addCase(loginUser.pending,(state) => {
-      state.loading = true;
-      state.error = ''
-    })
-    .addCase(loginUser.fulfilled ,(state,action)=>{
-      state.loading= false;
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.error = '';
-    })
-    .addCase(loginUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
-  }
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.error = '';
+
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+  },
 });
 
 export const { LOGOUT } = authSlice.actions;
 
 export default authSlice.reducer;
-// const authReducer = (state = initialState, action: Action): AuthState => {
-//   switch (action.type) {
-//     case LOGIN_REQUEST:
-//       return { ...state, loading: true, error: '' };
-//     case LOGIN_SUCCESS:
-//       return { ...state, user: action.payload.user,token: action.payload.token, loading: false, error: '' };
-//     case LOGIN_FAILURE:
-//       return { ...state, loading: false, error: action.payload }; 
-//     case LOGOUT: 
-//       return {user: null,token: null,loading:false, error: ''}
-//     default:
-//       return state;
-//   }
-// };
-
-

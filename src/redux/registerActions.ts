@@ -11,7 +11,7 @@ const validateUsername = (username: string) => /[A-Za-z]/.test(username);
 
 export const registerUser = createAsyncThunk (
     'auth/registerUser',
-    async ({email,name,password,confirmPassword}: {email: string,name:string, password: string,confirmPassword: string }, thunkAPI) => {
+    async ({email,name,password,confirmPassword,role}: {email: string,name:string, password: string,confirmPassword: string,role: string}, thunkAPI) => {
 
         if (!validateEmail(email)) {
             return thunkAPI.rejectWithValue('Invalid email format')
@@ -32,7 +32,7 @@ export const registerUser = createAsyncThunk (
 
         try {
             const response = await axios.post('https://nodejs-jira-pet-project.onrender.com/api/users/registration',
-                {email,name,password}, 
+                {email,name,password,role}, 
                 { headers: {'Content-Type': 'application/json'}}
             );
             return response.data;

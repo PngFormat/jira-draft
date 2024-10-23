@@ -4,9 +4,9 @@ import { CreateProjectProps } from '../../interfaces';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
-import { createProject } from '../../redux/projectRedux/projectActions';
+import { createProject, fetchProjects } from '../../redux/projectRedux/projectActions';
 
-export const CreateProject: React.FC<CreateProjectProps> = ({ handleCreate }) => {
+export const CreateProject: React.FC = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
@@ -23,11 +23,17 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ handleCreate }) =>
 
         setLoading(true);
         try {
-            await dispatch(createProject({ title, description })).unwrap();
-            setSuccess(true);
-            navigate('/projects');
-        } catch (err) {
-            setError('Failed to create project. Please try again.');
+          const newProject = { title, description };
+          await dispatch(createProject(newProject)).unwrap();
+  
+          const existingProjects = JSON.parse(localStorage.getItem('projects') || '[]') || [];
+          localStorage.setItem('projects', JSON.stringify([...existingProjects, newProject]));
+  
+          setSuccess(true);
+          navigate('/projects');
+        } catch (err: any) {
+            console.error('Error creating project:', err);
+            setError(err.response?.data?.message || 'Failed to create project. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -48,6 +54,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ handleCreate }) =>
                     margin="normal"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    fullWidth
+                    sx={{ mt: 1, width: '220px' }}
                 />
                 <TextField
                     label="Description" 
@@ -55,6 +63,8 @@ export const CreateProject: React.FC<CreateProjectProps> = ({ handleCreate }) =>
                     margin="normal"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    fullWidth
+                    sx={{ mt: 1, width: '220px' }}
                 />
                 <Button
                     variant="contained"

@@ -7,7 +7,7 @@ export const createProject = createAsyncThunk(
     async(project:Project,{rejectWithValue,getState}) => {
 
         const state: any = getState();
-        const token = state.auth.token || localStorage.getItem('token');
+        const token = state.auth.token || localStorage.getItem('token') as string;
       
   
         if (!token) {
@@ -29,6 +29,32 @@ export const createProject = createAsyncThunk(
             return response.data.project;
         }
         catch(error:any) {
-            return rejectWithValue(error.response?.data || 'An error occurred');        }
+            return rejectWithValue(error.response?.data || 'An error occurred');}
     }
 )
+
+export const fetchProjects = createAsyncThunk(
+    'projects/fetch', 
+    async (_, {getState,rejectWithValue}) => {
+        const state: any = getState();
+        const token = state.auth.token || localStorage.getItem('token') as string;
+
+        try{
+            const response = await axios.get('https://nodejs-jira-pet-project.onrender.com/api/projects/',
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+
+                }
+            )
+            console.log(response.data)
+            
+            return response.data;
+        } catch(error:any) {
+            return rejectWithValue(error.response?.data || 'An error occurred while fetching projects');
+        }
+    
+    
+  });
