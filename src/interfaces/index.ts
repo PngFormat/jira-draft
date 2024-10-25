@@ -25,6 +25,8 @@ export interface IRegisterState {
 export interface IProject {
   title:string;
   description:string;
+  id?:string | undefined;
+  onClick?: () => void
 }
 
 export interface CreateProjectProps {

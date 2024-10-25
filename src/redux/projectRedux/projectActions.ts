@@ -49,7 +49,6 @@ export const fetchProjects = createAsyncThunk(
 
                 }
             )
-            console.log(response.data)
             
             return response.data;
         } catch(error:any) {
@@ -58,3 +57,28 @@ export const fetchProjects = createAsyncThunk(
     
     
   });
+
+  export const deleteProjects = createAsyncThunk(
+    'projects/delete',
+    async (id:string,{getState,rejectWithValue}) => {
+        const state: any = getState();
+        const token = state.auth.token || localStorage.getItem('token') as string;
+
+        try{
+            const response = await axios.delete(`https://nodejs-jira-pet-project.onrender.com/api/projects/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+
+                }
+            )
+            alert('Deleted successfully')
+            return response.data;
+        }catch(error:any) {
+            return rejectWithValue(error.response?.data || 'An error occurred while fetching projects');
+
+        }
+    }
+  )

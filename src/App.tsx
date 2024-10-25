@@ -10,6 +10,7 @@ import ProjectPage from './screens/ProjectPage';
 import PrivateRoute from './privateRoute/PrivateRoute';
 import CreateProject from './components/Project/CreateProject';
 import { IProject } from './interfaces';
+import { ProjectDetailsPage } from './screens/ProjectDetailsPage';
 
 function App() {
  
@@ -38,6 +39,16 @@ function App() {
         </PrivateRoute>
         }
         />
+
+        <Route 
+        path="/projects/:id" 
+        element={
+        <PrivateRoute> 
+          <ProjectDetailsPage/>
+        </PrivateRoute>
+        }
+        />
+        
       </Routes>
     </Router>
   );

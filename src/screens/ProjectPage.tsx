@@ -22,6 +22,15 @@ const ProjectPage: React.FC = () => {
     dispatch(logoutUser(navigate))
   }
 
+  const handleClick = (event:any) => {
+    console.log('Event:', event);
+    console.log('Target:', event.target);
+  };
+  const handleNavigateProjectDetails = (id:string) => {
+      navigate(`/projects/${id}`)
+      console.log('Project clicked:', id);
+    }
+
   useEffect(() => {
     const loadProjects = async () => {
       await dispatch(fetchProjects());
@@ -41,6 +50,7 @@ const ProjectPage: React.FC = () => {
       variant="outlined"
       sx={{ mt: 1 }}
       onClick={handleLogout}>LogOut</Button>
+      <Button onClick={handleClick}>Click Me</Button>
 
       <Button
       variant="outlined"
@@ -54,7 +64,9 @@ const ProjectPage: React.FC = () => {
                   ) :  projectArray && projectArray.length > 0 ? (
                       projectArray.map((project:any, index:any) => (
                           <ProjectComponent
+                              onClick={() => handleNavigateProjectDetails(project.id)}
                               key={index}
+                              id={project.id}
                               title={project.title}
                               description={project.description}
                           />

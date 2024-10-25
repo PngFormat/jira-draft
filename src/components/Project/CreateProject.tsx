@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
 import { createProject, fetchProjects } from '../../redux/projectRedux/projectActions';
+import { useParams } from 'react-router-dom';
 
 export const CreateProject: React.FC = () => {
     const [title, setTitle] = useState('');
@@ -14,6 +15,8 @@ export const CreateProject: React.FC = () => {
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
+
+    const { id } = useParams<{ id: string }>();
 
     const onSubmit = async () => {
         if (!title || !description) {

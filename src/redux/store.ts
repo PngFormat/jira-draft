@@ -4,12 +4,14 @@ import authReducer from './authReducer';
 import { AnyAction } from 'redux';
 import registerReducer from './registerReducer';
 import projectReducer from './projectRedux/projectReducer';
+import tasksReducer from './tasks/taskReducer';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     register: registerReducer,
     projects: projectReducer,
+    tasks: tasksReducer,
   },
 });
 

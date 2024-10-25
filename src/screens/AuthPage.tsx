@@ -10,16 +10,10 @@ import { AppDispatch } from '../redux/store';
 function AuthPage() {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('denAdmin@gmail.com');
+  const [password, setPassword] = useState('123456Den');
   const [error, setError] = useState('');
   const authToken = localStorage.getItem('authToken')
-
-  // useEffect(()=> {
-  //   if(authToken){
-  //     navigate('/projects')
-  //   }
-  // },[authToken])
 
   const handleLogin = async () => {
     const result = await dispatch(loginUser({email,password}));
