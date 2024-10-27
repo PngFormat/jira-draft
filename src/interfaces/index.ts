@@ -54,4 +54,40 @@ export const initialState: ProjectState = {
   error: null,
 }
 
+export interface IStatus {
+  id: number;
+  title: string;
+  color: string;
+}
+
+
+export interface ITask {
+  id: number;
+  title: string;
+  description: string;
+  timeTracked: number;
+  timeAlloted: number;
+  projectId: number;
+  statusId: number;
+  typeId: number;
+  userId: number;
+  status: IStatus;
+  user: IUser;
+  files: IFile[];
+  onClick?: () => void
+
+}
+
+export interface IType {
+  id: number;
+  title: string;
+  color: string;
+}
+
+export interface IFile {
+  id: number;
+  commentId?: number;
+  taskId?: number;
+  name: string;
+}
 

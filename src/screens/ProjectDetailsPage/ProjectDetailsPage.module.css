@@ -21,6 +21,8 @@
     justify-content: center;
 }
 
+
+
 .buttonsContainer{
     display: flex;
     flex-direction: row;
@@ -49,8 +51,16 @@
 }
 
 .taskContainer{
-    margin-bottom: 18px;
-}
+    transition: 300ms;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    width: 700px;
+    margin-top: 10px;}
 
 @media only screen and (max-width: 1000px){
     .content{

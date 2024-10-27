@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../redux/authActions';
 import { Button,Box } from '@mui/material';
 import { AppDispatch } from '../redux/store';
-import { ProjectComponent } from '../components/Project/ProjectComponent';
+import { ProjectComponent } from '../components/Project/ProjectListItem';
 import { IProject,ProjectPageProps } from '../interfaces';
 import CreateProject from '../components/Project/CreateProject';
 import { Route } from 'react-router-dom';
@@ -22,10 +22,6 @@ const ProjectPage: React.FC = () => {
     dispatch(logoutUser(navigate))
   }
 
-  const handleClick = (event:any) => {
-    console.log('Event:', event);
-    console.log('Target:', event.target);
-  };
   const handleNavigateProjectDetails = (id:string) => {
       navigate(`/projects/${id}`)
       console.log('Project clicked:', id);
@@ -50,8 +46,6 @@ const ProjectPage: React.FC = () => {
       variant="outlined"
       sx={{ mt: 1 }}
       onClick={handleLogout}>LogOut</Button>
-      <Button onClick={handleClick}>Click Me</Button>
-
       <Button
       variant="outlined"
       sx={{ mt: 1 }}
