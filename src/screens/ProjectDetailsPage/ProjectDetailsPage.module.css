@@ -20,9 +20,6 @@
     align-items: center;
     justify-content: center;
 }
-
-
-
 .buttonsContainer{
     display: flex;
     flex-direction: row;

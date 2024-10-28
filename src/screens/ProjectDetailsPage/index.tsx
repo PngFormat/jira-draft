@@ -9,15 +9,8 @@ import { fetchTasks } from '../../redux/tasks/taskActions';
 import { TaskListItem } from '../../components/Project/TaskListItem';
 import { title } from 'process';
 
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-}
-
-
 export const ProjectDetailsPage: React.FC = () => {
-
+    const navigate = useNavigate();
     const {id} = useParams<{id:string}>();
     const dispatch:AppDispatch = useDispatch();
     const { tasks, loading, error } = useSelector((state: any) => state.tasks);
@@ -29,7 +22,8 @@ export const ProjectDetailsPage: React.FC = () => {
   }, [dispatch, id]);
 
   const handleNavigateTaskDetails = (id:number) => {
-
+    navigate(`/projects/${id}/tasks`)
+    console.log('Project clicked:', id);
   }
 
   const taskArray = tasks?.tasks || []
@@ -55,7 +49,7 @@ export const ProjectDetailsPage: React.FC = () => {
                             id={task.id}
                             title={task.title}
                             description={task.description}
-                            onClick={() => { handleNavigateTaskDetails(task.id) }}
+                            onClick={() => {handleNavigateTaskDetails(task.id) }}
                             timeTracked={task.timeTracked}
                             timeAlloted={task.timeAlloted}
                             projectId={task.projectId}
@@ -64,6 +58,7 @@ export const ProjectDetailsPage: React.FC = () => {
                             userId={task.userId}
                             status={task.status}
                             user={task.user || null}  
+                            type={task.type}
                             files={task.filests || undefined} 
                         />
 

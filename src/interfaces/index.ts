@@ -1,7 +1,12 @@
+export type TUserRole = 'ADMIN' | 'USER';
+
+
 export interface IUser {
-    id: number;
-    login: string;
-    password: string;
+  id: number;
+  name: string;
+  email: string;
+  role: TUserRole;
+  avatar?: string;
 }
 
 export interface IAuthState {
@@ -74,6 +79,7 @@ export interface ITask {
   status: IStatus;
   user: IUser;
   files: IFile[];
+  type: IType;
   onClick?: () => void
 
 }

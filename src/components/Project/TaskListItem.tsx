@@ -10,9 +10,10 @@ import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import { deleteProjects } from '../../redux/projectRedux/projectActions';
 import { fetchProjects } from '../../redux/projectRedux/projectActions';
+import TaskStatus from '../TaskStatus';
+import TaskType from '../TaskType';
 import { ITask } from '../../interfaces';
-
-
+import TaskUser from '../TaskUser';
 
 export const TaskListItem: React.FC<ITask> = ({ id, 
     title, 
@@ -26,6 +27,7 @@ export const TaskListItem: React.FC<ITask> = ({ id,
     userId, 
     status, 
     user, 
+    type,
     files }) => {
     const dispatch:AppDispatch = useDispatch();
 
@@ -37,8 +39,6 @@ export const TaskListItem: React.FC<ITask> = ({ id,
           
            console.log(`Editing project: ${id}`);
     };
-
-
     const handleDeleteTask = (id:number | undefined) => {
         if (!id) {
             console.error('Project ID is undefined.');
@@ -55,7 +55,18 @@ export const TaskListItem: React.FC<ITask> = ({ id,
         <div className={styles.content}>
           <span className={styles.title}>{title}</span>
           <span className={styles.description}>{description}</span>
-          <div className={styles.additionalInfo}>
+          
+          <div className={styles.blockInfo}>
+            <div className={styles.additionalInfoItem}>
+              <TaskStatus status={status} />
+            </div>
+
+            <div className={styles.additionalInfoItem}>
+              <TaskType type={type} />
+            </div>
+            <div className={styles.additionalInfoItem}>
+              <TaskUser user={user} />
+            </div>
           </div>
         </div>
         <div className={styles.actionsContainer}>
@@ -69,6 +80,5 @@ export const TaskListItem: React.FC<ITask> = ({ id,
           />
         </div>
       </div>
-
     )
 }

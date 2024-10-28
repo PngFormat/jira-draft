@@ -7,10 +7,15 @@
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
     padding: 12px;
     border-radius: 12px;
-    width: 700px;
+    width: 750px;
     margin-top: 10px;
 }
 
+.blockInfo {
+    display: flex;
+    justify-content: start;
+    column-gap: 5px;
+}
 .container:hover{
     padding-bottom: 15px;
     transition: 300ms;

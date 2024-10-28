@@ -49,6 +49,7 @@ export const ProjectComponent: React.FC<IProject> = ({id,title,description,onCli
             </div>
             </div>
             <div className={styles.actionsContainer}>
+                
             <EditIcon className={styles.actionIcon}
             onClick={() => handleEditProject(id)}
             />
