@@ -5,7 +5,7 @@ import { Project,ProjectState } from '../../interfaces';
 
 export const fetchTasks = createAsyncThunk(
     'tasks/fetchTasks', 
-    async (projectId: string,{getState}) => {
+    async (projectId: number| string,{getState}) => {
 
     const state: any = getState();
     const token = state.auth.token || localStorage.getItem('token') as string;

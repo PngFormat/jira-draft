@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../redux/registerActions';
+import { registerUser } from '../redux/register/registerActions';
 import { AppDispatch } from '../redux/store';
 
 function RegistrationPage() {

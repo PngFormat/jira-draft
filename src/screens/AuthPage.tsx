@@ -4,7 +4,7 @@ import '../App.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import {loginUser} from '../redux/authActions';
+import {loginUser} from '../redux/auth/authActions';
 import { AppDispatch } from '../redux/store';
 
 function AuthPage() {

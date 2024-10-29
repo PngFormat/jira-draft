@@ -3,7 +3,7 @@ import styles from '../Project/Project.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import {loginUser} from '../../redux/authActions';
+import {loginUser} from '../../redux/auth/authActions';
 import { AppDispatch } from '../../redux/store';
 import { IProject } from '../../interfaces';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';

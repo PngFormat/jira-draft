@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../redux/authActions';
+import { logoutUser } from '../redux/auth/authActions';
 import { Button,Box } from '@mui/material';
 import { AppDispatch } from '../redux/store';
 import { ProjectComponent } from '../components/Project/ProjectListItem';

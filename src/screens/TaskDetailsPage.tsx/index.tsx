@@ -1,18 +1,33 @@
-import { Button } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import TaskStatus from '../../components/TaskStatus';
-import TaskType from '../../components/TaskType';
-import TaskUser from '../../components/TaskUser';
-import styles from './TaskDetail.module.css';
+import { Button,Box } from '@mui/material';
+import { AppDispatch,RootState } from '../../redux/store';
+import { useSelector } from 'react-redux';
+import styles from './TaskDetail.module.css'
+import { fetchTasks } from '../../redux/tasks/taskActions';
+import { TaskListItem } from '../../components/Project/TaskListItem';
+import { TaskDetailsItem } from '../../components/Project/TaskDetailsItem';
+import AddFileButton from '../../components/AddFileButton';
 
 
 const TaskDetailsPage = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
+    const {id} = useParams<{id:string}>();
+    const dispatch:AppDispatch = useDispatch();
+    const { tasks, loading, error } = useSelector((state: any) => state.tasks);
+
+    useEffect(() => {
+      if (id) {
+          dispatch(fetchTasks(id));
+      }
+    }, [dispatch, id]);
+    
 
   const deleteCurrentTask = React.useCallback(() => {}, []);
+
+  const taskArray = tasks?.tasks || []
+
 
   const goToTaskEditor = React.useCallback(() => {
     navigate('/projects/1/tasks/edit/1');
@@ -24,7 +39,6 @@ const TaskDetailsPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* <span className={styles.title}>{TASK.title}</span> */}
       <div className={styles.content}>
         <div className={styles.buttonsContainer}>
           <Button
@@ -50,19 +64,42 @@ const TaskDetailsPage = () => {
             Delete Task
           </Button>
         </div>
-        {/* <span className={styles.description}>{TASK.description}</span> */}
         <div className={styles.additionalInfo}>
           <div className={styles.additionalInfoItem}>
-            {/* <TaskType type={TASK.type} /> */}
+          {loading ? (
+                    <p>Loading details...</p>
+                ) : error ? (
+                    <p style={{ color: 'red' }}>Error: {error}</p>
+                ) : taskArray.length > 0 ? (
+                    taskArray.map((task: any, index: number) => (
+                        <div key={task.id || index} >
+                           <TaskDetailsItem 
+                            id={task.id}
+                            title={task.title}
+                            description={task.description}
+                            timeTracked={task.timeTracked}
+                            timeAlloted={task.timeAlloted}
+                            projectId={task.projectId}
+                            statusId={task.statusId}
+                            typeId={task.typeId}
+                            userId={task.userId}
+                            status={task.status}
+                            user={task.user || null}  
+                            type={task.type}
+                            files={task.filests || undefined} 
+                          />
+
+                        </div>
+                    ))
+                ) : (
+                    <p>No available description and comments</p>
+                )}
           </div>
-          <div className={styles.additionalInfoItem}>
-            {/* <TaskStatus status={TASK.status} /> */}
-          </div>
-          <div className={styles.additionalInfoItem}>
-            {/* <TaskUser user={TASK.user} /> */}
-          </div>
+          
         </div>
         <span className={styles.fileListTitle}>Files:</span>
+        
+        <AddFileButton addFile={() => {}}/>
         <div className={styles.fileList}>
           {/* {TASK.files.map((file: IFile) => (
             <div key={file.id} className={styles.fileContainer}>

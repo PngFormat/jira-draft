@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import loginUser from './authActions';
 import { logoutUser } from './authActions';
-import { IAuthState } from '../interfaces';
+import { IAuthState } from '../../interfaces';
 
 const storedToken = localStorage.getItem('authToken') || null;
 

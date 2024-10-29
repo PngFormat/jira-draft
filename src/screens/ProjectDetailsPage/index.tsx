@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import styles from './ProjectDetailsPage.module.css'
 import { fetchTasks } from '../../redux/tasks/taskActions';
 import { TaskListItem } from '../../components/Project/TaskListItem';
-import { title } from 'process';
 
 export const ProjectDetailsPage: React.FC = () => {
     const navigate = useNavigate();
@@ -17,7 +16,7 @@ export const ProjectDetailsPage: React.FC = () => {
 
     useEffect(() => {
       if (id) {
-          dispatch(fetchTasks(id));
+        dispatch(fetchTasks(id));
       }
   }, [dispatch, id]);
 
@@ -34,8 +33,8 @@ export const ProjectDetailsPage: React.FC = () => {
         <div className={styles.content}>
           <div className={styles.buttonsContainer}>
             <Button variant="contained">Create Task</Button>
-          <Button variant="contained">Edit Project</Button>
-          <Button variant="outlined" color='error'>Delete Project</Button>
+            <Button variant="contained">Edit Project</Button>
+            <Button variant="outlined" color='error'>Delete Project</Button>
             </div>
            
             {loading ? (

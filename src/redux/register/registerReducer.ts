@@ -1,4 +1,4 @@
-import { IRegisterState,IAction } from "../interfaces";
+import { IRegisterState,IAction } from "../../interfaces";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState : IRegisterState  =  {

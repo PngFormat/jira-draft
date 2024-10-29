@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {thunk,ThunkDispatch} from 'redux-thunk';
-import authReducer from './authReducer';
+import authReducer from './auth/authReducer';
 import { AnyAction } from 'redux';
-import registerReducer from './registerReducer';
+import registerReducer from './register/registerReducer';
 import projectReducer from './projectRedux/projectReducer';
 import tasksReducer from './tasks/taskReducer';
 

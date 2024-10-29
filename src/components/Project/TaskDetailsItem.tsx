@@ -14,11 +14,12 @@ import TaskStatus from '../TaskStatus';
 import TaskType from '../TaskType';
 import { ITask } from '../../interfaces';
 import TaskUser from '../TaskUser';
+import { fetchTasks } from '../../redux/tasks/taskActions';
 
-export const TaskListItem: React.FC<ITask> = ({ id, 
+export const TaskDetailsItem: React.FC<ITask> = ({ 
+    id, 
     title, 
     description, 
-    onClick, 
     timeTracked, 
     timeAlloted, 
     projectId, 
@@ -30,8 +31,11 @@ export const TaskListItem: React.FC<ITask> = ({ id,
     type,
     files }) => {
     const dispatch:AppDispatch = useDispatch();
+    const navigate = useNavigate();
+    const { tasks, loading, error } = useSelector((state: any) => state.tasks);
 
-    const handleEditTask = (id:number| undefined) => {
+
+    const handleEditComment = (id:number| undefined) => {
         if (!id) {
             console.error('Project ID is undefined.');
             return;
@@ -39,7 +43,7 @@ export const TaskListItem: React.FC<ITask> = ({ id,
           
            console.log(`Editing project: ${id}`);
     };
-    const handleDeleteTask = (id:number | undefined) => {
+    const handleDeleteComment = (id:number | undefined) => {
         if (!id) {
             console.error('Project ID is undefined.');
             return;
@@ -51,18 +55,19 @@ export const TaskListItem: React.FC<ITask> = ({ id,
         }
     }
     return (
-        <div className={styles.container} onClick={onClick}>
+        <div className={styles.container}>
+
         <div className={styles.content}>
-          <span className={styles.title}>{title}</span>
           <span className={styles.description}>{description}</span>
+          <span className={styles.description}>{id}</span>
+
           
           <div className={styles.blockInfo}>
             <div className={styles.additionalInfoItem}>
-              <TaskStatus status={status} />
-            </div>
+                {status ? <TaskStatus status={status} /> : <p>Status not available</p>}</div>
 
             <div className={styles.additionalInfoItem}>
-              <TaskType type={type} />
+            {type ? <TaskType type={type} /> : <p>Type not available</p>}
             </div>
             <div className={styles.additionalInfoItem}>
               <TaskUser user={user} />
@@ -70,15 +75,16 @@ export const TaskListItem: React.FC<ITask> = ({ id,
           </div>
         </div>
         <div className={styles.actionsContainer}>
-          <EditIcon 
+          {/* <EditIcon 
             className={styles.actionIcon} 
-            onClick={() => handleEditTask(id)} 
+            onClick={() => handleEditComment(id)} 
           />
           <DeleteIcon 
             className={styles.actionIcon} 
             onClick={() => handleDeleteTask(id)} 
-          />
+          /> */}
         </div>
+        
       </div>
     )
 }
