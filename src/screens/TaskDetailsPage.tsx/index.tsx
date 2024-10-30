@@ -9,6 +9,7 @@ import { fetchTasks } from '../../redux/tasks/taskActions';
 import { TaskListItem } from '../../components/Project/TaskListItem';
 import { TaskDetailsItem } from '../../components/Project/TaskDetailsItem';
 import AddFileButton from '../../components/AddFileButton';
+import { FilesTask } from '../../components/FilesTask';
 
 
 const TaskDetailsPage = () => {
@@ -27,6 +28,8 @@ const TaskDetailsPage = () => {
   const deleteCurrentTask = React.useCallback(() => {}, []);
 
   const taskArray = tasks?.tasks || []
+
+  console.log(taskArray)
 
 
   const goToTaskEditor = React.useCallback(() => {
@@ -89,6 +92,21 @@ const TaskDetailsPage = () => {
                             files={task.filests || undefined} 
                           />
 
+                      <div>
+                          {task.files.length > 0? (
+                          task.files.map((file: any) => (
+                            <div>
+                              <span className={styles.fileListTitle}>Files:</span>
+
+                              <FilesTask key={file.id} id={file.id} name={file.name} />
+                            </div>
+                          ))
+                        ) : (
+                          <p>No files available for this task.</p>
+                        )}
+                     </div>
+
+
                         </div>
                     ))
                 ) : (
@@ -97,24 +115,15 @@ const TaskDetailsPage = () => {
           </div>
           
         </div>
-        <span className={styles.fileListTitle}>Files:</span>
+        
         
         <AddFileButton addFile={() => {}}/>
         <div className={styles.fileList}>
-          {/* {TASK.files.map((file: IFile) => (
-            <div key={file.id} className={styles.fileContainer}>
-              <AttachedFile file={file} />
-            </div> */}
-          {/* ))} */}
-          {/* <AddFileButton addFile={() => {}} /> */}
+       
         </div>
         <span className={styles.commentListTitle}>Comments:</span>
         <div className={styles.commentList}>
-          {/* {COMMENTS.map((comment: IComment) => (
-            <div key={comment.id} className={styles.commentContainer}>
-              <CommentListItem comment={comment} />
-            </div>
-          ))} */}
+        
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export interface IUser {
 }
 
 export interface IAuthState {
-  user: any; 
+  user: IUser | null; 
   token: string | null;
   loading: boolean;
   error: string;
@@ -23,7 +23,7 @@ export interface IAction {
 
 export interface IRegisterState {
   loading: boolean,
-  userInfo: any | null,
+  userInfo: IUser | null;
   error: string | null
 }
 

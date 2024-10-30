@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchTasks } from "./taskActions";
+import { ITask } from "../../interfaces";
 
-const initialState = {
+interface TaskState {
+    tasks: ITask[];
+    loading: boolean;
+    error: string;
+}
+
+const initialState:TaskState = {
     tasks: [] ,
     loading: false,
     error: '',
