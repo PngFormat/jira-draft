@@ -6,8 +6,7 @@ import { AppDispatch,RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import styles from './TaskDetail.module.css'
 import { fetchTasks } from '../../redux/tasks/taskActions';
-import { TaskListItem } from '../../components/Project/TaskListItem';
-import { TaskDetailsItem } from '../../components/Project/TaskDetailsItem';
+import { TaskDetailsItem } from '../../components/TaskDetailsItem/TaskDetailsItem';
 import AddFileButton from '../../components/AddFileButton';
 import { FilesTask } from '../../components/FilesTask';
 
@@ -17,6 +16,9 @@ const TaskDetailsPage = () => {
     const {id} = useParams<{id:string}>();
     const dispatch:AppDispatch = useDispatch();
     const { tasks, loading, error } = useSelector((state: any) => state.tasks);
+    const taskArray = tasks?.tasks || []
+    const taskTitle = taskArray.length > 0 ? taskArray[0].title : 'Task Details';
+
 
     useEffect(() => {
       if (id) {
@@ -27,9 +29,7 @@ const TaskDetailsPage = () => {
 
   const deleteCurrentTask = React.useCallback(() => {}, []);
 
-  const taskArray = tasks?.tasks || []
-
-  console.log(taskArray)
+  
 
 
   const goToTaskEditor = React.useCallback(() => {
@@ -42,6 +42,8 @@ const TaskDetailsPage = () => {
 
   return (
     <div className={styles.container}>
+      <span className={styles.title}>{taskTitle}</span>
+      <div></div>
       <div className={styles.content}>
         <div className={styles.buttonsContainer}>
           <Button
@@ -95,10 +97,13 @@ const TaskDetailsPage = () => {
                       <div>
                           {task.files.length > 0? (
                           task.files.map((file: any) => (
-                            <div>
+                            <div className={styles.fileList}>
                               <span className={styles.fileListTitle}>Files:</span>
+                              <div className={styles.fileList}>
+                                <FilesTask key={file.id} id={file.id} name={file.name} />
+                                <AddFileButton addFile={() => {}}/>
+                              </div>
 
-                              <FilesTask key={file.id} id={file.id} name={file.name} />
                             </div>
                           ))
                         ) : (
@@ -117,7 +122,6 @@ const TaskDetailsPage = () => {
         </div>
         
         
-        <AddFileButton addFile={() => {}}/>
         <div className={styles.fileList}>
        
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../Project/Project.module.css'
+import styles from './TaskDetailsItem.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
@@ -56,7 +56,7 @@ export const TaskDetailsItem: React.FC<ITask> = ({
     }
     return (
         <div className={styles.container}>
-
+          
         <div className={styles.content}>
           <span className={styles.description}>{description}</span>
           <span className={styles.description}>{id}</span>

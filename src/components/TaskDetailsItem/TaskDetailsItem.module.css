@@ -1,0 +1,75 @@
+.container{
+    transition: 300ms;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    width: 750px;
+    margin-top: 10px;
+}
+
+
+
+.blockInfo {
+    display: flex;
+    justify-content: start;
+    column-gap: 5px;
+}
+.container:hover{
+    padding-bottom: 15px;
+    transition: 300ms;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+.title{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.description{
+    font-size: 14px;
+    color: #575757;
+    margin-bottom: 4px;
+}
+
+.additionalInfo{
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    margin-top: 12px;
+}
+
+.taskCount{
+    font-size: 14px;
+    color: #575757;
+    margin-right: 6px;
+}
+
+.userCount{
+    font-size: 14px;
+    color: #575757;
+    margin-left: 6px;
+}
+
+.actionsContainer{
+    display: flex;
+    flex-direction: row;
+    margin-left: 4px;
+}
+
+.actionIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+}
