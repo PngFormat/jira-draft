@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../Project/Project.module.css'
+import styles from './FilesTask.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';

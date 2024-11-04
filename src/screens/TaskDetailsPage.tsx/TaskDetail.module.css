@@ -64,11 +64,12 @@
   .fileList {
     display: flex;
     width: 250px;
-    flex-direction: row;
+    flex-direction: column;
     margin-top: 12px;
   }
   
   .fileContainer {
+    width: 150px;
     margin-right: 4px;
   }
   

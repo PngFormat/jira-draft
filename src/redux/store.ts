@@ -5,6 +5,7 @@ import { AnyAction } from 'redux';
 import registerReducer from './register/registerReducer';
 import projectReducer from './projectRedux/projectReducer';
 import tasksReducer from './tasks/taskReducer';
+import commentReducer from './comments/commentReducer';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     register: registerReducer,
     projects: projectReducer,
     tasks: tasksReducer,
+    comments: commentReducer,
   },
 });
 

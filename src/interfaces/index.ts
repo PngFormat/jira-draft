@@ -97,3 +97,12 @@ export interface IFile {
   name: string;
 }
 
+export interface IComment {
+  id: number;
+  message: string;
+  taskId: number;
+  userId: number;
+  user: IUser;
+  files: IFile[];
+}
+

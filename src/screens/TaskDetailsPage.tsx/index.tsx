@@ -9,6 +9,9 @@ import { fetchTasks } from '../../redux/tasks/taskActions';
 import { TaskDetailsItem } from '../../components/TaskDetailsItem/TaskDetailsItem';
 import AddFileButton from '../../components/AddFileButton';
 import { FilesTask } from '../../components/FilesTask';
+import { fetchComments } from '../../redux/comments/commentActions';
+import { IComment } from '../../interfaces';
+import { CommentUser } from '../../components/CommentsUser';
 
 
 const TaskDetailsPage = () => {
@@ -16,14 +19,17 @@ const TaskDetailsPage = () => {
     const {id} = useParams<{id:string}>();
     const dispatch:AppDispatch = useDispatch();
     const { tasks, loading, error } = useSelector((state: any) => state.tasks);
+    const { comments } = useSelector((state: any) => state.comments); 
+
     const taskArray = tasks?.tasks || []
     const taskTitle = taskArray.length > 0 ? taskArray[0].title : 'Task Details';
-
+    const commentsArray = comments?.comments || []
 
     useEffect(() => {
       if (id) {
           dispatch(fetchTasks(id));
       }
+      dispatch(fetchComments())
     }, [dispatch, id]);
     
 
@@ -99,7 +105,7 @@ const TaskDetailsPage = () => {
                           task.files.map((file: any) => (
                             <div className={styles.fileList}>
                               <span className={styles.fileListTitle}>Files:</span>
-                              <div className={styles.fileList}>
+                              <div className={styles.fileContainer}>
                                 <FilesTask key={file.id} id={file.id} name={file.name} />
                                 <AddFileButton addFile={() => {}}/>
                               </div>
@@ -127,6 +133,21 @@ const TaskDetailsPage = () => {
         </div>
         <span className={styles.commentListTitle}>Comments:</span>
         <div className={styles.commentList}>
+          {commentsArray.length > 0 ? (
+            commentsArray.map((comment:any) => (
+              <CommentUser
+                key={comment.id}
+                id={comment.id}
+                taskId={comment.taskId}
+                message={comment.message}
+                userId={comment.userId}
+                user={comment.user}
+                files={comment.files}
+              />
+            ))
+          ) : (
+            <p>No comments available for this task.</p>
+          )}
         
         </div>
       </div>
