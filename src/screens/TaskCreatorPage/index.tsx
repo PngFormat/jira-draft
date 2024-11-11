@@ -8,6 +8,9 @@ import { createProject, fetchProjects } from '../../redux/projectRedux/projectAc
 import { useParams } from 'react-router-dom';
 import { IType,IStatus,IUser } from '../../interfaces';
 import styles from './TaskCreatorPage.module.css'
+import FilePicker from '../../components/pickers/FilePicker';
+import TypePickerModal from '../../components/dialogs/TypePickerModal';
+import TypePicker from '../../components/pickers/TypePicker';
 
 export const TaskCreatorPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -28,29 +31,34 @@ export const TaskCreatorPage: React.FC = () => {
 
     const { id } = useParams<{ id: string }>();
 
-    const onSubmit = async () => {
-        if (!title || !description) {
-            setError('Please fill in both fields');
-            return;
-        }
+    const addFile = React.useCallback(
+        (file: File) => {
+          setFiles((uploadedFiles: File[]) => {
+            const isSelectedFile = files.some(
+              (uploadedFile: File) => uploadedFile.name === file.name
+            );
+            if (isSelectedFile) {
+              alert('You have already selected a file with this name');
+              return uploadedFiles;
+            }
+            return [...uploadedFiles, file];
+          });
+        },
+        [files]
+    );
 
-        setLoading(true);
-        try {
-          const newProject = { title, description };
-          await dispatch(createProject(newProject)).unwrap();
-  
-          const existingProjects = JSON.parse(localStorage.getItem('projects') || '[]') || [];
-          localStorage.setItem('projects', JSON.stringify([...existingProjects, newProject]));
-  
-          setSuccess(true);
-          navigate('/projects');
-        } catch (err: any) {
-            console.error('Error creating project:', err);
-            setError(err.response?.data?.message || 'Failed to create project. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const createNewTask = React.useCallback(() => {
+    //     createTask(
+    //       title,
+    //       description,
+    //       status!,
+    //       type!,
+    //       user!,
+    //       timeAllotted,
+    //       files,
+    //       goToProjectDetails
+    //     );
+    //   }, [title, description, timeAllotted, type, status, user, files]);
 
     const handleCloseSnackbar = () => {
         setError('');
@@ -97,21 +105,21 @@ export const TaskCreatorPage: React.FC = () => {
             </div>
             <div className={styles.additionalInfoItem}>
               <span className={styles.additionalInfoItemTitle}>Status:</span>
-              <StatusPicker status={status} setStatus={setStatus} />
+              {/* <StatusPicker status={status} setStatus={setStatus} /> */}
             </div>
             <div className={styles.additionalInfoItem}>
               <span className={styles.additionalInfoItemTitle}>User:</span>
-              <TaskUserPicker
+              {/* <TaskUserPicker
                 usersInProject={projectInfo!.users}
                 user={user}
                 setUser={setUser}
-              />
+              /> */}
             </div>
           </div>
   
           <span className={styles.fileListTitle}>New Files</span>
           <div className={styles.fileList}>
-            <NewFileList files={files} deleteFile={deleteFile} />
+            {/* <NewFileList files={files} deleteFile={deleteFile} /> */}
           </div>
           <FilePicker setFile={addFile}>
             <Button className={styles.buttonAddFile} variant="contained">
@@ -119,7 +127,7 @@ export const TaskCreatorPage: React.FC = () => {
             </Button>
           </FilePicker>
           <Button
-            onClick={createNewTask}
+            // onClick={createNewTask}
             className={styles.button}
             variant="contained"
             disabled={loading}

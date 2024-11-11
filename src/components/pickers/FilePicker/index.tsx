@@ -37,3 +37,5 @@ const FilePicker = ({ children, setFile }: IProps) => {
         </div>
     );
 };
+
+export default FilePicker;

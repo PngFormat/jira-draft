@@ -6,6 +6,7 @@ import registerReducer from './register/registerReducer';
 import projectReducer from './projectRedux/projectReducer';
 import tasksReducer from './tasks/taskReducer';
 import commentReducer from './comments/commentReducer';
+import typeReducer from './types/typeReducer';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     projects: projectReducer,
     tasks: tasksReducer,
     comments: commentReducer,
+    types: typeReducer,
   },
 });
 
