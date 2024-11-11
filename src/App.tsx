@@ -12,6 +12,7 @@ import CreateProject from './components/Project/CreateProject';
 import { IProject } from './interfaces';
 import { ProjectDetailsPage } from './screens/ProjectDetailsPage';
 import TaskDetailsPage from './screens/TaskDetailsPage.tsx';
+import TaskCreatorPage from './screens/TaskCreatorPage';
 
 function App() {
  
@@ -55,6 +56,15 @@ function App() {
         element={
         <PrivateRoute> 
           <TaskDetailsPage/>
+        </PrivateRoute>
+        }
+        />
+
+        <Route 
+        path="/projects/tasks/create" 
+        element={
+        <PrivateRoute> 
+          <TaskCreatorPage/>
         </PrivateRoute>
         }
         />

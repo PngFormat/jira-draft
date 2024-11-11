@@ -25,6 +25,11 @@ export const ProjectDetailsPage: React.FC = () => {
     console.log('Project clicked:', id);
   }
 
+  const handleNavigateToCreateTask = () => {
+    navigate(`/projects/tasks/create`)
+    console.log('Project clicked:');
+  }
+
   const taskArray = tasks?.tasks || []
 
     return (
@@ -32,7 +37,7 @@ export const ProjectDetailsPage: React.FC = () => {
             <h1>Project Details</h1>
         <div className={styles.content}>
           <div className={styles.buttonsContainer}>
-            <Button variant="contained">Create Task</Button>
+            <Button variant="contained" onClick={() => handleNavigateToCreateTask()}>Create Task</Button>
             <Button variant="contained">Edit Project</Button>
             <Button variant="outlined" color='error'>Delete Project</Button>
             </div>
