@@ -1,47 +1,44 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import fetchTypes from '../../../redux/types/typeActions';
-import { IType } from '../../../interfaces';
+import { IStatus } from '../../../interfaces';
 import TaskType from '../../TaskType';
 import { Button } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import styles from './TypePickerModal.module.css';
+import styles from '../TypePickerModal/TypePickerModal.module.css';
 import { AppDispatch, RootState } from '../../../redux/store';
+import fetchStatuses from '../../../redux/statuses/statusActions';
 
 export interface IProps {
-  selectType: (selectedType: IType) => void;
+  selectStatus: (selectedStatus: IStatus) => void;
   closeModal: () => void;
 }
 
-const TypePickerModal = ({ selectType, closeModal }: IProps) => {
+const StatusPickerModal = ({ selectStatus, closeModal }: IProps) => {
   const dispatch: AppDispatch = useDispatch();
-  const { types, loading, error } = useSelector((state: any) => state.types);
+  const { statuses, loading, error } = useSelector((state: any) => state.statuses);
 
   useEffect(() => {
-    dispatch(fetchTypes());
-  }, [dispatch]); 
-  console.log('1',types)
-
-
-  const typesArray = types?.types || []
-  console.log('2',typesArray)
+    dispatch(fetchStatuses());
+  }, [dispatch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const statusesArray = statuses?.statuses || [];
+
   return (
     <Dialog onClose={closeModal} open={true}>
       <div className={styles.container}>
-        <span className={styles.title}>Select Type</span>
+        <span className={styles.title}>Select Status</span>
         <div className={styles.content}>
           <div>
-            {typesArray.map((typeItem: IType) => (
+            {statusesArray.map((statusItem: IStatus) => (
               <div
-                key={typeItem.id}
+                key={statusItem.id}
                 className={styles.typeContainer}
-                onClick={() => selectType(typeItem)}
+                onClick={() => selectStatus(statusItem)} 
               >
-                <TaskType type={typeItem} />
+                <TaskType type={statusItem} />
               </div>
             ))}
           </div>
@@ -58,4 +55,4 @@ const TypePickerModal = ({ selectType, closeModal }: IProps) => {
   );
 };
 
-export default TypePickerModal;
+export default StatusPickerModal;

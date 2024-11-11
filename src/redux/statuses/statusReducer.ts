@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IType } from '../../interfaces';
-import { fetchTypes } from './typeActions';
+import { fetchStatuses } from './statusActions';
 
-interface TypesState {
-  types: IType[];
+interface StatusState {
+  statuses: IType[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: TypesState = {
-  types: [],
+const initialState: StatusState = {
+  statuses: [],
   loading: false,
   error: null,
 };
@@ -20,17 +20,17 @@ const typesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTypes.pending, (state) => {
+      .addCase(fetchStatuses.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTypes.fulfilled, (state, action: PayloadAction<IType[]>) => {
+      .addCase(fetchStatuses.fulfilled, (state, action: PayloadAction<IType[]>) => {
         state.loading = false;
-        state.types = action.payload;
+        state.statuses = action.payload;
       })
-      .addCase(fetchTypes.rejected, (state, action) => {
+      .addCase(fetchStatuses.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Failed to fetch types';
+        state.error = action.payload as string || 'Failed to fetch statuses';
       });
   },
 });

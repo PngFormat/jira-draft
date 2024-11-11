@@ -11,6 +11,7 @@ import styles from './TaskCreatorPage.module.css'
 import FilePicker from '../../components/pickers/FilePicker';
 import TypePickerModal from '../../components/dialogs/TypePickerModal';
 import TypePicker from '../../components/pickers/TypePicker';
+import StatusPicker from '../../components/pickers/StatusPicker';
 
 export const TaskCreatorPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -105,7 +106,7 @@ export const TaskCreatorPage: React.FC = () => {
             </div>
             <div className={styles.additionalInfoItem}>
               <span className={styles.additionalInfoItemTitle}>Status:</span>
-              {/* <StatusPicker status={status} setStatus={setStatus} /> */}
+              <StatusPicker status={status} setStatus={setStatus} />
             </div>
             <div className={styles.additionalInfoItem}>
               <span className={styles.additionalInfoItemTitle}>User:</span>
