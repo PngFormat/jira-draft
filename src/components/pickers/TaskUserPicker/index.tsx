@@ -1,43 +1,48 @@
-import { useCallback, useState } from "react";
-import { IUser } from "../../../interfaces";
-import styles from './TypePicker.module.css'
-import TypePickerModal from "../../dialogs/TypePickerModal";
-import { Button } from "@mui/material";
-
+import { Button } from '@mui/material';
+import React from 'react';
+import { IUser } from '../../../interfaces';
+import TaskUserPickerModal from '../../dialogs/TaskUserPickerModal';
+import styles from './TaskUserPicker.module.css';
 
 interface IProps {
-    user: IUser | undefined;
-    setType: (user: IUser) => void;
+  usersInProject: IUser[];
+  user: IUser | undefined;
+  setUser: (user: IUser) => void;
 }
 
-const TypePicker = ({user, setType}: IProps) => {
-    const [open, setOpen] = useState(false);
+const TaskUserPicker = ({ usersInProject, user, setUser }: IProps) => {
+  const [open, setOpen] = React.useState(false);
 
-    const openModal = useCallback(() => {
-        setOpen(true);
-    },[])
+  const openModal = React.useCallback(() => {
+    setOpen(true);
+  }, []);
 
-    const closeModal = useCallback(() => {
-        setOpen(false);
-    },[])
+  const closeModal = React.useCallback(() => {
+    setOpen(false);
+  }, []);
 
-    const selectUser = useCallback((selectedType: IUser) => {
-        setType(selectedType);
-        closeModal();
-    },[])
+  const selectUser = React.useCallback((selectedUser: IUser) => {
+    setUser(selectedUser);
+    closeModal();
+  }, []);
 
-    return (
-        <div className={styles.container}>
+  return (
+    <div className={styles.container}>
       <div className={styles.content}>
         <span className={styles.title}>{user?.email ?? 'Not selected'}</span>
         {open && (
-          <TaskUserPickerModal selectUser={selectUser} closeModal={closeModal} />
+          <TaskUserPickerModal
+            usersInProject={usersInProject}
+            selectUser={selectUser}
+            closeModal={closeModal}
+          />
         )}
       </div>
       <Button onClick={openModal} className={styles.button} variant="contained">
         Select
       </Button>
     </div>
-    )
-}
-export default TypePicker;
+  );
+};
+
+export default TaskUserPicker;
