@@ -30,8 +30,9 @@ export interface IRegisterState {
 export interface IProject {
   title:string;
   description:string;
-  id?:string | undefined;
+  id?: number;
   onClick?: () => void
+  users?: IUser[];
 }
 
 export interface CreateProjectProps {
@@ -48,7 +49,7 @@ export interface Project {
 }
 
 export interface ProjectState {
-  projects: Project[];
+  projects: IProject[];
   loading: boolean,
   error: string | null;
 }

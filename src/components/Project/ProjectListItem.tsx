@@ -15,7 +15,7 @@ import { fetchProjects } from '../../redux/projectRedux/projectActions';
 export const ProjectComponent: React.FC<IProject> = ({id,title,description,onClick}) => {
     const dispatch:AppDispatch = useDispatch();
 
-    const handleEditProject = (id:string | undefined) => {
+    const handleEditProject = (id:string) => {
         if (!id) {
             console.error('Project ID is undefined.');
             return;
@@ -25,7 +25,7 @@ export const ProjectComponent: React.FC<IProject> = ({id,title,description,onCli
     };
 
 
-    const handleDeleteProject = (id:string | undefined) => {
+    const handleDeleteProject = (id: number) => {
         if (!id) {
             console.error('Project ID is undefined.');
             return;
@@ -51,10 +51,10 @@ export const ProjectComponent: React.FC<IProject> = ({id,title,description,onCli
             <div className={styles.actionsContainer}>
                 
             <EditIcon className={styles.actionIcon}
-            onClick={() => handleEditProject(id)}
+            onClick={() => handleEditProject(String(id))}
             />
             <DeleteIcon className={styles.actionIcon}
-            onClick={() => handleDeleteProject(id)}/>
+            onClick={() => handleDeleteProject(Number(id))}/>
             </div>
         </div>
     )

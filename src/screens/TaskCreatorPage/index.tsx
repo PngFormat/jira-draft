@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
 import { createProject, fetchProjects } from '../../redux/projectRedux/projectActions';
 import { useParams } from 'react-router-dom';
-import { projectInfoSelector } from '@selectors/projectSelectors';
+import { projectInfoSelector } from '../../redux/store/selectors/projectSelectors';
 import { IType,IStatus,IUser } from '../../interfaces';
 import styles from './TaskCreatorPage.module.css'
 import FilePicker from '../../components/pickers/FilePicker';
@@ -14,11 +14,18 @@ import TypePickerModal from '../../components/dialogs/TypePickerModal';
 import TypePicker from '../../components/pickers/TypePicker';
 import StatusPicker from '../../components/pickers/StatusPicker';
 import TaskUserPicker from '../../components/pickers/TaskUserPicker';
+import { IProject } from '../../interfaces';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 export const TaskCreatorPage: React.FC = () => {
+    const { projectId } = useParams();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    const projectInfo = useSelector<RootState, IProject | undefined>(
+      (state: RootState) => projectInfoSelector(parseInt(projectId!))(state)
+    );
 
 
     const [title, setTitle] = React.useState<string>('');
@@ -34,9 +41,7 @@ export const TaskCreatorPage: React.FC = () => {
 
     const { id } = useParams<{ id: string }>();
 
-    const projectInfo = useSelector<RootState, IProject | undefined>(
-      (state: RootState) => projectInfoSelector(parseInt(projectId!))(state)
-    );
+
 
     const addFile = React.useCallback(
         (file: File) => {
@@ -71,6 +76,8 @@ export const TaskCreatorPage: React.FC = () => {
         setError('');
         setSuccess(false);
     };
+
+    
 
     return (
         <div className={styles.container}>
@@ -117,7 +124,7 @@ export const TaskCreatorPage: React.FC = () => {
             <div className={styles.additionalInfoItem}>
               <span className={styles.additionalInfoItemTitle}>User:</span>
               <TaskUserPicker
-                usersInProject={projectInfo!.users}
+                usersInProject={projectInfo?.users ?? []} 
                 user={user}
                 setUser={setUser}
               />
