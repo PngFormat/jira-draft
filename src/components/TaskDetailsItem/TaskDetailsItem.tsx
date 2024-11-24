@@ -21,7 +21,7 @@ export const TaskDetailsItem: React.FC<ITask> = ({
     title, 
     description, 
     timeTracked, 
-    timeAlloted, 
+    timeAllotted, 
     projectId, 
     statusId, 
     typeId, 

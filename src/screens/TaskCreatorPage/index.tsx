@@ -39,6 +39,9 @@ export const TaskCreatorPage: React.FC = () => {
 
     const { id } = useParams<{ id: string }>();
 
+    console.log("Props Project ID:", id);
+
+
 
 
     const addFile = React.useCallback(
@@ -57,37 +60,36 @@ export const TaskCreatorPage: React.FC = () => {
         [files]
     );
 
+ 
+
+    
+
     const createNewTask = async () => {
-      if (!title || !description || !status || !type || !user) {
-        setError('Please fill in all required fields.');
-        return;
-      }
-  
-      setLoading(true);
-      setError('');
       try {
-        await dispatch(
-          createTasks({
-            projectId: Number(projectId),
-            task: {
-              title,
-              description,
-              status,
-              type,
-              user,
-              timeAllotted,
-              files,
-            },
-          })
-        );
-        setSuccess(true);
-        // navigate(`/projects/${projectId}/details`);
-      } catch (err: any) {
-        setError(err.message || 'Failed to create task');
-      } finally {
-        setLoading(false);
+        const projectId = id;
+        if (!projectId) {
+          console.error("Project ID is missing or invalid");
+          return;
+        }
+        const taskPayload = {
+          task: {
+            title: title,
+            description : description,
+            statusId: status?.id || 0,
+            typeId: type?.id || 0,
+            userId: user?.id || 0,
+            timeAllotted: timeAllotted || 0,
+          },
+          projectId,
+        };
+        navigate(`/projects/${projectId}`)
+        await dispatch(createTasks(taskPayload));
+      } catch (error) {
+        console.error("Error creating task:", error);
       }
     };
+    
+    
 
     return (
         <div className={styles.container}>

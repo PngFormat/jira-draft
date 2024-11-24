@@ -61,7 +61,7 @@ function App() {
         />
 
         <Route 
-        path="/projects/tasks/create" 
+        path="/projects/:id/tasks/create" 
         element={
         <PrivateRoute> 
           <TaskCreatorPage/>

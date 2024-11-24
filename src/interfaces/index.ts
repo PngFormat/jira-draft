@@ -72,7 +72,7 @@ export interface ITask {
   title: string;
   description: string;
   timeTracked: number;
-  timeAlloted: number;
+  timeAllotted: number;
   projectId: number;
   statusId: number;
   typeId: number;

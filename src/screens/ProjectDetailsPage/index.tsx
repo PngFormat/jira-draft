@@ -11,6 +11,7 @@ import { TaskListItem } from '../../components/Project/TaskListItem';
 export const ProjectDetailsPage: React.FC = () => {
     const navigate = useNavigate();
     const {id} = useParams<{id:string}>();
+    const projectId = Number(id);
     const dispatch:AppDispatch = useDispatch();
     const { tasks, loading, error } = useSelector((state: any) => state.tasks);
 
@@ -25,8 +26,8 @@ export const ProjectDetailsPage: React.FC = () => {
   }
 
   const handleNavigateToCreateTask = () => {
-    navigate(`/projects/tasks/create`)
-  }
+    navigate(`/projects/${projectId}/tasks/create`);
+  };
 
   const taskArray = tasks?.tasks || []
 
@@ -53,7 +54,7 @@ export const ProjectDetailsPage: React.FC = () => {
                             description={task.description}
                             onClick={() => {handleNavigateTaskDetails(task.id) }}
                             timeTracked={task.timeTracked}
-                            timeAlloted={task.timeAlloted}
+                            timeAllotted={task.timeAlloted}
                             projectId={task.projectId}
                             statusId={task.statusId}
                             typeId={task.typeId}

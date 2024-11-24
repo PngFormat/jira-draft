@@ -89,7 +89,7 @@ const TaskDetailsPage = () => {
                             title={task.title}
                             description={task.description}
                             timeTracked={task.timeTracked}
-                            timeAlloted={task.timeAlloted}
+                            timeAllotted={task.timeAlloted}
                             projectId={task.projectId}
                             statusId={task.statusId}
                             typeId={task.typeId}

@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Project,ProjectState } from '../../interfaces';
+import { ITask } from '../../interfaces';
+import { Alert } from '@mui/material';
+import { AxiosError } from 'axios';
 
 
 export const fetchTasks = createAsyncThunk(
@@ -22,51 +25,46 @@ export const fetchTasks = createAsyncThunk(
     return response.data; 
 });
 
-interface CreateTaskPayload {
-  projectId: number | string;
-  task: {
-    title: string;
-    description: string;
-    status: string;
-    type: string;  
-    user: string;  
-    timeAllotted: number;
-    files: File[];
-  };
-}
-
 export const createTasks = createAsyncThunk(
   'tasks/createTasks',
-  async ({ projectId, task }: CreateTaskPayload, { getState }) => {
+  async (
+    { task, projectId }: { task: { title: string; description: string; statusId: number; typeId: number; userId: number; timeAllotted: number }, projectId: string },
+    { getState, rejectWithValue }
+  ) => {
     const state: any = getState();
     const token = state.auth.token || localStorage.getItem('token') as string;
 
-    if (!token) {
-      throw new Error('Authentication token is missing');
-    }
+    try {
+      const response = await axios.post(
+        `https://nodejs-jira-pet-project.onrender.com/api/projects/${projectId}/tasks/`,
+        task, 
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    const formData = new FormData();
-    formData.append('title', task.title);
-    formData.append('description', task.description);
-    formData.append('status', task.status);
-    formData.append('type', task.type);
-    formData.append('user', task.user);
-    formData.append('timeAllotted', task.timeAllotted.toString());
-    task.files.forEach((file) => {
-      formData.append('files', file);
-    });
-
-    const response = await axios.post(
-      `https://nodejs-jira-pet-project.onrender.com/api/projects/${projectId}/tasks/`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
+      alert('Task created successfully');
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.error("Server Error:", error.response.data);
+          return rejectWithValue(error.response.data); 
+        } else if (error.request) {
+          console.error("Request Error:", error.request);
+          return rejectWithValue("No response received from the server");
+        } else {
+          console.error("Error:", error.message);
+          return rejectWithValue(error.message); 
+        }
+      } else {
+        console.error("Unknown error:", error);
+        return rejectWithValue("An unknown error occurred");
       }
-    );
-
-    return response.data;
+    }
   }
 );
+
