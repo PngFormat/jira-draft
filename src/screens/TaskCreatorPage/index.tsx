@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { Container, Typography, Button, Box, TextField, Snackbar } from '@mui/material';
-import { CreateProjectProps } from '../../interfaces';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
-import { createProject, fetchProjects } from '../../redux/projectRedux/projectActions';
 import { useParams } from 'react-router-dom';
 import { projectInfoSelector } from '../../redux/store/selectors/projectSelectors';
 import { IType,IStatus,IUser } from '../../interfaces';
 import styles from './TaskCreatorPage.module.css'
 import FilePicker from '../../components/pickers/FilePicker';
-import TypePickerModal from '../../components/dialogs/TypePickerModal';
 import TypePicker from '../../components/pickers/TypePicker';
 import StatusPicker from '../../components/pickers/StatusPicker';
 import TaskUserPicker from '../../components/pickers/TaskUserPicker';
 import { IProject } from '../../interfaces';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { createTasks } from '../../redux/tasks/taskActions';
 
 export const TaskCreatorPage: React.FC = () => {
     const { projectId } = useParams();
@@ -59,25 +57,37 @@ export const TaskCreatorPage: React.FC = () => {
         [files]
     );
 
-    // const createNewTask = React.useCallback(() => {
-    //     createTask(
-    //       title,
-    //       description,
-    //       status!,
-    //       type!,
-    //       user!,
-    //       timeAllotted,
-    //       files,
-    //       goToProjectDetails
-    //     );
-    //   }, [title, description, timeAllotted, type, status, user, files]);
-
-    const handleCloseSnackbar = () => {
-        setError('');
-        setSuccess(false);
+    const createNewTask = async () => {
+      if (!title || !description || !status || !type || !user) {
+        setError('Please fill in all required fields.');
+        return;
+      }
+  
+      setLoading(true);
+      setError('');
+      try {
+        await dispatch(
+          createTasks({
+            projectId: Number(projectId),
+            task: {
+              title,
+              description,
+              status,
+              type,
+              user,
+              timeAllotted,
+              files,
+            },
+          })
+        );
+        setSuccess(true);
+        // navigate(`/projects/${projectId}/details`);
+      } catch (err: any) {
+        setError(err.message || 'Failed to create task');
+      } finally {
+        setLoading(false);
+      }
     };
-
-    
 
     return (
         <div className={styles.container}>
@@ -141,7 +151,7 @@ export const TaskCreatorPage: React.FC = () => {
             </Button>
           </FilePicker>
           <Button
-            // onClick={createNewTask}
+            onClick={createNewTask}
             className={styles.button}
             variant="contained"
             disabled={loading}

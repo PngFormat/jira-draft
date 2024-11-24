@@ -5,6 +5,10 @@ import React from 'react';
 import { IUser } from '../../../interfaces';
 import TaskUser from '../../TaskUser';
 import styles from './TaskUserPickerModal.module.css';
+import fetchUsers from '../../../redux/users/userActions';
+import { AppDispatch } from '../../../redux/store';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export interface IProps {
   usersInProject: IUser[];
@@ -17,10 +21,14 @@ const TaskUserPickerModal = ({
   selectUser,
   closeModal,
 }: IProps) => {
-  const { fetchUsers } = useUsers();
+
+  const dispatch: AppDispatch = useDispatch();
+  const { users } = useSelector((state: any) => state.users); 
+  const usersArray = users?.users || []
+  console.log(usersArray)
 
   React.useEffect(() => {
-    fetchUsers();
+    dispatch(fetchUsers());
   }, []);
 
   return (
@@ -29,7 +37,7 @@ const TaskUserPickerModal = ({
         <span className={styles.title}>Select User</span>
         <div className={styles.content}>
           <div>
-            {usersInProject.map((userItem: IUser) => (
+            {usersArray.map((userItem: IUser) => (
               <div
                 key={userItem.id}
                 className={styles.userContainer}

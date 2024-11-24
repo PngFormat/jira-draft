@@ -22,12 +22,10 @@ export const ProjectDetailsPage: React.FC = () => {
 
   const handleNavigateTaskDetails = (id:number) => {
     navigate(`/projects/${id}/tasks`)
-    console.log('Project clicked:', id);
   }
 
   const handleNavigateToCreateTask = () => {
     navigate(`/projects/tasks/create`)
-    console.log('Project clicked:');
   }
 
   const taskArray = tasks?.tasks || []
