@@ -13,6 +13,8 @@ import { IProject } from './interfaces';
 import { ProjectDetailsPage } from './screens/ProjectDetailsPage';
 import TaskDetailsPage from './screens/TaskDetailsPage.tsx';
 import TaskCreatorPage from './screens/TaskCreatorPage';
+import TaskEditorPage from './screens/TaskEditorPage';
+import ProjectEditorHOC from './screens/ProjectEditorPage';
 
 function App() {
  
@@ -68,10 +70,29 @@ function App() {
         </PrivateRoute>
         }
         />
+
+      <Route 
+        path="/projects/:projectId/tasks/edit/:id" 
+          element={
+          <PrivateRoute> 
+            <TaskEditorPage />
+          </PrivateRoute>
+      }
+        />
+
+        <Route 
+        path="/projects/:projectId/edit" 
+          element={
+          <PrivateRoute> 
+            <ProjectEditorHOC/>
+          </PrivateRoute>
+      }
+        />
         
       </Routes>
     </Router>
   );
 }
+
 
 export default App;

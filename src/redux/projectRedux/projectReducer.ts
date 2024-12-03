@@ -1,50 +1,67 @@
-import { createSlice,PayloadAction } from "@reduxjs/toolkit"
-import { ProjectState } from "../../interfaces"
-import { createProject,fetchProjects } from "./projectActions"
-import { Project } from "../../interfaces"
+import { createSlice } from "@reduxjs/toolkit";
+import { ProjectState } from "../../interfaces";
+import {
+  createProject,
+  fetchProjects,
+  deleteProjects,
+  addUserToProject,
+  removeUserFromProject,
+  updateProject,
+} from "./projectActions";
+import { Project } from "../../interfaces";
 
-
-
-export const initialState: ProjectState = {
-    projects: [],
+const projectsSlice = createSlice({
+  name: "projects",
+  initialState: {
+    projects: [] as Project[],
     loading: false,
-    error: null || '',
-}
+    error: null as string | null,
+  } as ProjectState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(createProject.fulfilled, (state, action) => {
+        state.projects.push(action.payload);
+      })
+      .addCase(fetchProjects.fulfilled, (state, action) => {
+        state.projects = action.payload;
+      })
+      .addCase(deleteProjects.fulfilled, (state, action) => {
+        state.projects = state.projects.filter(
+          (project) => project.id !== action.payload.id
+        );
+      })
+      .addCase(updateProject.fulfilled, (state, action) => {
+        const updatedProject = action.payload;
+        const projectIndex = state.projects.findIndex(
+          (project) => project.id === updatedProject.id
+        );
+        if (projectIndex !== -1) {
+          state.projects[projectIndex] = updatedProject; 
+        }
+      })
+      .addCase(addUserToProject.fulfilled, (state, action) => {
+        const updatedProject = action.payload;
+        const projectIndex = state.projects.findIndex(
+          (project) => project.id === updatedProject.id
+        );
+        if (projectIndex !== -1) {
+          state.projects[projectIndex] = updatedProject;
+        }
+      })
+      .addCase(removeUserFromProject.fulfilled, (state, action) => {
+        const updatedProject = action.payload;
+        const projectIndex = state.projects.findIndex(
+          (project) => project.id === updatedProject.id
+        );
+        if (projectIndex !== -1) {
+          state.projects[projectIndex] = updatedProject;
+        }
+      })
+      .addCase(updateProject.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });
+  },
+});
 
-export const projectSlice = createSlice({
-    name:'projects',
-    initialState,
-    reducers:{},
-    extraReducers: (builder) => {
-        builder
-        .addCase(createProject.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-        .addCase(createProject.fulfilled, (state, action: PayloadAction<Project>) => {
-            state.loading = false;
-            state.projects.push(action.payload);
-        })
-        .addCase(createProject.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload as string; 
-        })
-        .addCase(fetchProjects.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-        .addCase(fetchProjects.fulfilled, (state, action: PayloadAction<Project[]>) => {
-            state.loading = false;
-            state.projects = action.payload;
-        })
-        .addCase(fetchProjects.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload as string;
-        });
-        
-    }
-
-})
-
-export default projectSlice.reducer;
-  
+export default projectsSlice.reducer;

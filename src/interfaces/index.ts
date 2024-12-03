@@ -96,6 +96,8 @@ export interface IFile {
   commentId?: number;
   taskId?: number;
   name: string;
+  file?: File;
+
 }
 
 export interface IComment {

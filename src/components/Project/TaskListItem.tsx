@@ -14,6 +14,8 @@ import TaskStatus from '../TaskStatus';
 import TaskType from '../TaskType';
 import { ITask } from '../../interfaces';
 import TaskUser from '../TaskUser';
+import { RootState } from '../../redux/store';
+import { taskInfoSelector } from '../../redux/store/selectors/taskSelectors';
 
 export const TaskListItem: React.FC<ITask> = ({ id, 
     title, 
@@ -30,15 +32,18 @@ export const TaskListItem: React.FC<ITask> = ({ id,
     type,
     files }) => {
     const dispatch:AppDispatch = useDispatch();
+    const navigate = useNavigate();
+    const taskInfo = useSelector((state: RootState) => taskInfoSelector(id)(state));
 
-    const handleEditTask = (id:number| undefined) => {
-        if (!id) {
-            console.error('Project ID is undefined.');
-            return;
-        }
-          
-           console.log(`Editing project: ${id}`);
-    };
+    const handleNavigateToEditTask = (taskId: number) => {
+      
+      if (!taskId || !projectId) {
+          console.error('Task ID or Project ID is missing.');
+          return;
+      };
+
+      navigate(`/projects/${projectId}/tasks/edit/${taskId}`);
+  };
     const handleDeleteTask = (id:number | undefined) => {
         if (!id) {
             console.error('Project ID is undefined.');
@@ -70,10 +75,13 @@ export const TaskListItem: React.FC<ITask> = ({ id,
           </div>
         </div>
         <div className={styles.actionsContainer}>
-          <EditIcon 
-            className={styles.actionIcon} 
-            onClick={() => handleEditTask(id)} 
-          />
+            <EditIcon
+                    className={styles.actionIcon}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleNavigateToEditTask(id);
+                    }}
+                />
           <DeleteIcon 
             className={styles.actionIcon} 
             onClick={() => handleDeleteTask(id)} 

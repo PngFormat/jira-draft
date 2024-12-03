@@ -19,7 +19,7 @@ export const ProjectDetailsPage: React.FC = () => {
       if (id) {
         dispatch(fetchTasks(id));
       }
-  }, [dispatch, id]);
+    }, [dispatch, id]);
 
   const handleNavigateTaskDetails = (id:number) => {
     navigate(`/projects/${id}/tasks`)
@@ -27,6 +27,10 @@ export const ProjectDetailsPage: React.FC = () => {
 
   const handleNavigateToCreateTask = () => {
     navigate(`/projects/${projectId}/tasks/create`);
+  };
+
+  const handleNavigateToEditProject = () => {
+    navigate(`/projects/${id}/edit`);
   };
 
   const taskArray = tasks?.tasks || []
@@ -37,7 +41,7 @@ export const ProjectDetailsPage: React.FC = () => {
         <div className={styles.content}>
           <div className={styles.buttonsContainer}>
             <Button variant="contained" onClick={() => handleNavigateToCreateTask()}>Create Task</Button>
-            <Button variant="contained">Edit Project</Button>
+            <Button variant="contained" onClick={() => handleNavigateToEditProject()}>Edit Project</Button>
             <Button variant="outlined" color='error'>Delete Project</Button>
             </div>
            
@@ -64,8 +68,11 @@ export const ProjectDetailsPage: React.FC = () => {
                             type={task.type}
                             files={task.filests || undefined} 
                         />
-
+                        {/* <Button onClick={() => navigate(`/projects/${projectId}/tasks/edit/${task.id}`)} variant="contained">
+                          Edit Task
+                        </Button> */}
                             </div>
+                            
                     ))
                 ) : (
                     <p>No tasks available for this project.</p>

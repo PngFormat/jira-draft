@@ -1,19 +1,20 @@
 import NewFileList from '../../components/lists/NewFileList';
-import UploadedFileList from '@components/lists/UploadedFileList';
+import UploadedFileList from '../../components/lists/UploadedFileList';
 import FilePicker from '../../components/pickers/FilePicker';
 import StatusPicker from '../../components/pickers/StatusPicker';
 import TaskUserPicker from '../../components/pickers/TaskUserPicker';
 import TypePicker from '../../components/pickers/TypePicker';
-import useTasks from '@hooks/useTasks';
+import useTasks from '../../hooks/useTasks';
 import { IFile, IProject, IStatus, ITask, IType, IUser } from '../../interfaces';
 import { Button, TextField } from '@mui/material';
 import { projectInfoSelector } from '../../redux/store/selectors/projectSelectors';
-import { taskInfoSelector } from '@selectors/taskSelectors';
-import { RootState } from '../../redux/store';
+import { taskInfoSelector } from '../../redux/store/selectors/taskSelectors';
+import { AppDispatch, RootState } from '../../redux/store';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './TaskEditorPage.module.css';
+import { UseDispatch } from 'react-redux';
 
 interface IProps {
   projectId: number;
@@ -38,6 +39,7 @@ const TaskEditorPage = ({
   currentUser,
   currentFiles,
 }: IProps) => {
+
   const [title, setTitle] = React.useState<string>(currentTitle);
   const [description, setDescription] =
     React.useState<string>(currentDescription);
@@ -50,9 +52,10 @@ const TaskEditorPage = ({
   const [user, setUser] = React.useState<IUser | undefined>(currentUser);
   const [files, setFiles] = React.useState<File[]>([]);
   const [oldFiles, setOldFiles] = React.useState<IFile[]>(currentFiles);
+  const dispatch:AppDispatch = useDispatch();
 
-  const projectInfo = useSelector<TRootState, IProject | undefined>(
-    (state: TRootState) => projectInfoSelector(projectId)(state)
+  const projectInfo = useSelector<RootState, IProject | undefined>(
+    (state: RootState) => projectInfoSelector(projectId)(state)
   );
 
   const { loading, updateTask } = useTasks(projectId);
@@ -98,18 +101,27 @@ const TaskEditorPage = ({
   );
 
   const updateCurrentTask = React.useCallback(() => {
-    updateTask(
-      taskId,
-      title,
-      description,
-      status!,
-      type!,
-      user!,
-      timeAllotted,
-      files,
-      oldFiles,
-      goToProjectDetails
-    );
+    if (status && type && user) {
+      
+      const updatedTaskPayload = {
+        taskId: taskId,
+        projectId: projectId, 
+        updatedTask: {
+          title: title,
+          description: description,
+          statusId: status.id, 
+          typeId: type.id, 
+          userId: user.id,
+          timeAllotted: timeAllotted,
+        },
+      };
+  
+      dispatch(updateTask(updatedTaskPayload)).then(() => {
+        if (goToProjectDetails) {
+          goToProjectDetails(); // Call the goToProjectDetails function after the task update
+        }
+      });
+    }
   }, [
     taskId,
     title,
@@ -120,7 +132,10 @@ const TaskEditorPage = ({
     user,
     files,
     oldFiles,
+    dispatch,
   ]);
+  
+  
 
   const goToProjectDetails = React.useCallback(() => {
     navigate(-1);
@@ -171,7 +186,7 @@ const TaskEditorPage = ({
           <div className={styles.additionalInfoItem}>
             <span className={styles.additionalInfoItemTitle}>User:</span>
             <TaskUserPicker
-              usersInProject={projectInfo!.users}
+              usersInProject={projectInfo!.users || []}
               user={user}
               setUser={setUser}
             />
@@ -204,22 +219,23 @@ const TaskEditorPage = ({
 };
 
 const TaskEditorHOC = () => {
-  const { taskId } = useParams();
+  const { id } = useParams();
+  const taskId = parseInt(id!, 10);
 
-  const taskInfo = useSelector<RootState, ITask | undefined>(
-    (state: RootState) => taskInfoSelector(parseInt(taskId!))(state)
-  );
+ const taskInfo = useSelector((state: RootState) => taskInfoSelector(taskId)(state));
 
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!taskInfo) {
+    if (!id || isNaN(taskId)) {
+      console.error("Invalid or missing Task ID:", id);
       navigate(-1);
     }
-  }, [taskInfo]);
+  }, [id, taskId, navigate]);
+  // console.log(taskInfo)
 
   if (!taskInfo) {
-    return <div />;
+    return <div>Loading...</div>;
   }
 
   return (
