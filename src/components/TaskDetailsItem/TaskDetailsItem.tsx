@@ -72,14 +72,14 @@ export const TaskDetailsItem: React.FC<ITask> = ({
           </div>
         </div>
         <div className={styles.actionsContainer}>
-          {/* <EditIcon 
+          <EditIcon 
             className={styles.actionIcon} 
             onClick={() => handleEditComment(id)} 
           />
           <DeleteIcon 
             className={styles.actionIcon} 
-            onClick={() => handleDeleteTask(id)} 
-          /> */}
+            onClick={() => handleDeleteComment(id)} 
+          />
         </div>
         
       </div>

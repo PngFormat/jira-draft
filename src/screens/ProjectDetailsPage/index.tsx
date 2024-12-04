@@ -68,11 +68,7 @@ export const ProjectDetailsPage: React.FC = () => {
                             type={task.type}
                             files={task.filests || undefined} 
                         />
-                        {/* <Button onClick={() => navigate(`/projects/${projectId}/tasks/edit/${task.id}`)} variant="contained">
-                          Edit Task
-                        </Button> */}
-                            </div>
-                            
+                            </div> 
                     ))
                 ) : (
                     <p>No tasks available for this project.</p>

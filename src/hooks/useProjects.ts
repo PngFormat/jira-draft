@@ -77,7 +77,6 @@ import {
     const getProjectById = React.useCallback(
         (id: number | string | undefined) => {
           const project = projects.find((project: any) => project.id === id);
-          console.log('Found project:', project); 
           return project;
         },
         [projects]

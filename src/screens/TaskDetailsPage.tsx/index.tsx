@@ -1,135 +1,81 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button,Box } from '@mui/material';
-import { AppDispatch,RootState } from '../../redux/store';
+import { Button } from '@mui/material';
+import { AppDispatch } from '../../redux/store';
 import { useSelector } from 'react-redux';
-import styles from './TaskDetail.module.css'
+import styles from './TaskDetail.module.css';
 import { fetchTasks } from '../../redux/tasks/taskActions';
-import { TaskDetailsItem } from '../../components/TaskDetailsItem/TaskDetailsItem';
-import AddFileButton from '../../components/AddFileButton';
-import { FilesTask } from '../../components/FilesTask';
 import { fetchComments } from '../../redux/comments/commentActions';
-import { IComment } from '../../interfaces';
+import { TaskDetailsItem } from '../../components/TaskDetailsItem/TaskDetailsItem';
 import { CommentUser } from '../../components/CommentsUser';
-
+import useTasks from '../../hooks/useTasks';
 
 const TaskDetailsPage = () => {
   const navigate = useNavigate();
-    const {id} = useParams<{id:string}>();
-    const dispatch:AppDispatch = useDispatch();
-    const { tasks, loading, error } = useSelector((state: any) => state.tasks);
-    const { comments } = useSelector((state: any) => state.comments); 
+  const { id } = useParams<{ id: string }>();
+  const dispatch: AppDispatch = useDispatch();
 
-    const taskArray = tasks?.tasks || []
-    const taskTitle = taskArray.length > 0 ? taskArray[0].title : 'Task Details';
-    const commentsArray = comments?.comments || []
+  const { tasks, loading, error } = useSelector((state: any) => state.tasks);
+  const { comments } = useSelector((state: any) => state.comments);
 
-    useEffect(() => {
-      if (id) {
-          dispatch(fetchTasks(id));
-      }
-      dispatch(fetchComments())
-    }, [dispatch, id]);
-    
+  const { getTaskById } = useTasks();
+  const task = getTaskById(id);
+  console.log(task)
 
-  const deleteCurrentTask = React.useCallback(() => {}, []);
+  const commentsArray = comments?.comments || [];
 
-  
-
+  const deleteCurrentTask = React.useCallback(() => {
+    // Implement task delete logic here
+  }, []);
 
   const goToTaskEditor = React.useCallback(() => {
-    navigate('/projects/1/tasks/edit/1');
-  }, []);
+    navigate(`/projects/1/tasks/edit/${id}`);
+  }, [id]);
 
   const goToCommentEditor = React.useCallback(() => {
-    navigate('/projects/1/tasks/1/comments/create');
-  }, []);
+    navigate(`/projects/1/tasks/${id}/comments/create`);
+  }, [id]);
 
   return (
     <div className={styles.container}>
-      <span className={styles.title}>{taskTitle}</span>
-      <div></div>
+      <span className={styles.title}>{task?.title || 'Task Details'}</span>
       <div className={styles.content}>
         <div className={styles.buttonsContainer}>
-          <Button
-            onClick={goToCommentEditor}
-            className={styles.button}
-            variant="contained"
-          >
+          <Button onClick={goToCommentEditor} className={styles.button} variant="contained">
             Create Comment
           </Button>
-          <Button
-            onClick={goToTaskEditor}
-            className={styles.button}
-            variant="contained"
-          >
+          <Button onClick={goToTaskEditor} className={styles.button} variant="contained">
             Edit Task
           </Button>
-          <Button
-            onClick={deleteCurrentTask}
-            className={styles.button}
-            variant="outlined"
-            color="error"
-          >
+          <Button onClick={deleteCurrentTask} className={styles.button} variant="outlined" color="error">
             Delete Task
           </Button>
         </div>
         <div className={styles.additionalInfo}>
-          <div className={styles.additionalInfoItem}>
           {loading ? (
-                    <p>Loading details...</p>
-                ) : error ? (
-                    <p style={{ color: 'red' }}>Error: {error}</p>
-                ) : taskArray.length > 0 ? (
-                    taskArray.map((task: any, index: number) => (
-                        <div key={task.id || index} >
-                           <TaskDetailsItem 
-                            id={task.id}
-                            title={task.title}
-                            description={task.description}
-                            timeTracked={task.timeTracked}
-                            timeAllotted={task.timeAlloted}
-                            projectId={task.projectId}
-                            statusId={task.statusId}
-                            typeId={task.typeId}
-                            userId={task.userId}
-                            status={task.status}
-                            user={task.user || null}  
-                            type={task.type}
-                            files={task.filests || undefined} 
-                          />
-
-                      <div>
-                          {task.files.length > 0? (
-                          task.files.map((file: any) => (
-                            <div className={styles.fileList}>
-                              <span className={styles.fileListTitle}>Files:</span>
-                              <div className={styles.fileContainer}>
-                                <FilesTask key={file.id} id={file.id} name={file.name} />
-                                <AddFileButton addFile={() => {}}/>
-                              </div>
-
-                            </div>
-                          ))
-                        ) : (
-                          <p>No files available for this task.</p>
-                        )}
-                     </div>
-
-
-                        </div>
-                    ))
-                ) : (
-                    <p>No available description and comments</p>
-                )}
-          </div>
-          
-        </div>
-        
-        
-        <div className={styles.fileList}>
-       
+            <p>Loading details...</p>
+          ) : error ? (
+            <p style={{ color: 'red' }}>Error: {error}</p>
+          ) : task ? (
+            <TaskDetailsItem
+              id={task.id}
+              title={task.title}
+              description={task.description}
+              timeTracked={task.timeTracked}
+              timeAllotted={task.timeAllotted}
+              projectId={task.projectId}
+              statusId={task.statusId}
+              typeId={task.typeId}
+              userId={task.userId}
+              status={task.status}
+              user={task.user || null}
+              type={task.type}
+              files={task.files || undefined}
+            />
+          ) : (
+            <p>Task not found</p>
+          )}
         </div>
         <span className={styles.commentListTitle}>Comments:</span>
         <div className={styles.commentList}>
@@ -148,7 +94,6 @@ const TaskDetailsPage = () => {
           ) : (
             <p>No comments available for this task.</p>
           )}
-        
         </div>
       </div>
     </div>

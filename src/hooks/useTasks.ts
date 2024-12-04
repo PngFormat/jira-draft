@@ -78,10 +78,7 @@ const useTasks = (projectId?: number  | undefined) => {
     },
     [dispatch]
   );
-
-  // return { updateExistingTask };
-
-
+  
   const deleteTask = React.useCallback(
     (taskId: number, onSuccess?: () => void) => {
       dispatch(deleteTasks({ projectId: projectId || 0, taskId })).then(() => {
