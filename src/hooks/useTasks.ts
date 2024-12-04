@@ -5,14 +5,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-const useTasks = (projectId: number | string) => {
+const useTasks = (projectId?: number  | undefined) => {
   const dispatch = useDispatch<AppDispatch>();
   const { id } = useParams<{ id: string }>();
 
-  const tasks = useSelector<RootState, ITask[]>(
-    (state: RootState) => state.tasks.tasks
-  );
-
+  const { tasks } = useSelector((state:any) => state.tasks.tasks);
   const error = useSelector<RootState, string>(
     (state: RootState) => state.tasks.error
   );
@@ -23,7 +20,7 @@ const useTasks = (projectId: number | string) => {
 
   const fetchAllTasks = React.useCallback(() => {
     if (id || projectId) {
-      dispatch(fetchTasks(id || projectId));
+      dispatch(fetchTasks(id || projectId || 0));
     }
   }, [dispatch, id, projectId]);
 
@@ -40,7 +37,7 @@ const useTasks = (projectId: number | string) => {
     ) => {
       dispatch(
         createTasks({
-          projectId: projectId.toString(),
+          projectId: projectId || 0 ,
           task: {
             title,
             description,
@@ -57,47 +54,51 @@ const useTasks = (projectId: number | string) => {
     [dispatch, projectId]
   );
 
-  const updateTaskHandler = React.useCallback(
+ const updateExistingTask = React.useCallback(
     (
-      taskId: number | string,
-      title: string,
-      description: string,
-      status: { id: number },
-      type: { id: number },
-      user: { id: number },
-      timeAllotted: number,
-      files: File[],
-      oldFiles: any[],
+      taskId: string | number,
+      projectId: string | number,
+      updatedTask: {
+        title?: string;
+        description?: string;
+        statusId?: number;
+        typeId?: number;
+        userId?: number;
+        timeAllotted?: number;
+      },
       onSuccess?: () => void
     ) => {
-      dispatch(
-        updateTask({
-          projectId: projectId.toString(),
-          taskId,
-          updatedTask: {
-            title,
-            description,
-            statusId: status.id,
-            typeId: type.id,
-            userId: user.id,
-            timeAllotted,
-          },
-        })
-      ).then(() => {
+      dispatch(updateTask({ taskId, projectId, updatedTask })).then((result) => {
+        if (updateTask.fulfilled.match(result)) {
+          if (onSuccess) onSuccess();
+        } else {
+          console.error('Failed to update task:', result.payload || result.error);
+        }
+      });
+    },
+    [dispatch]
+  );
+
+  // return { updateExistingTask };
+
+
+  const deleteTask = React.useCallback(
+    (taskId: number, onSuccess?: () => void) => {
+      dispatch(deleteTasks({ projectId: projectId || 0, taskId })).then(() => {
         if (onSuccess) onSuccess();
       });
     },
     [dispatch, projectId]
   );
 
-  const deleteTask = React.useCallback(
-    (taskId: number, onSuccess?: () => void) => {
-      dispatch(deleteTasks({ projectId: projectId.toString(), taskId })).then(() => {
-        if (onSuccess) onSuccess();
-      });
+  const getTaskById = React.useCallback(
+    (id: number | string | undefined) => {
+      const task = tasks.find((task: any) => task.id === id);
+      console.log('Found task:', task); 
+      return task;
     },
-    [dispatch, projectId]
-  );
+    [tasks]
+  )
 
   return {
     tasks,
@@ -107,6 +108,8 @@ const useTasks = (projectId: number | string) => {
     createTask,
     updateTask,
     deleteTask,
+    getTaskById,
+    updateExistingTask,
   };
 };
 

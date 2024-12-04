@@ -16,7 +16,6 @@ import {
     const dispatch = useDispatch<AppDispatch>();
   
     const { projects } = useSelector((state:any) => state.projects.projects);
-  
     const error = useSelector<RootState, string | null>(
       (state: RootState) => state.projects.error
     );

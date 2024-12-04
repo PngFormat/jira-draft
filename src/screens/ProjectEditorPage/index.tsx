@@ -59,8 +59,6 @@ const ProjectEditorPage: React.FC<{
 const ProjectEditorHOC: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
-  console.log(projectId)
-
   const { loading, updateExistingProject } = useProjects();
   const { getProjectById } = useProjects();
   const [projectInfo, setProjectInfo] = React.useState<IProject | null>(null);

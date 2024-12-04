@@ -26,6 +26,7 @@ interface IProps {
   currentStatus: IStatus;
   currentUser: IUser;
   currentFiles: IFile[];
+  projectInfo?: IProject;
 }
 
 const TaskEditorPage = ({
@@ -38,6 +39,8 @@ const TaskEditorPage = ({
   currentStatus,
   currentUser,
   currentFiles,
+  projectInfo,
+  
 }: IProps) => {
 
   const [title, setTitle] = React.useState<string>(currentTitle);
@@ -53,11 +56,6 @@ const TaskEditorPage = ({
   const [files, setFiles] = React.useState<File[]>([]);
   const [oldFiles, setOldFiles] = React.useState<IFile[]>(currentFiles);
   const dispatch:AppDispatch = useDispatch();
-
-  const projectInfo = useSelector<RootState, IProject | undefined>(
-    (state: RootState) => projectInfoSelector(projectId)(state)
-  );
-
   const { loading, updateTask } = useTasks(projectId);
 
   const navigate = useNavigate();
@@ -218,21 +216,24 @@ const TaskEditorPage = ({
   );
 };
 
-const TaskEditorHOC = () => {
-  const { id } = useParams();
-  const taskId = parseInt(id!, 10);
-
- const taskInfo = useSelector((state: RootState) => taskInfoSelector(taskId)(state));
-
+const TaskGroupEditorHOC: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  console.log('id task', id)
   const navigate = useNavigate();
+  const { getTaskById, loading, updateExistingTask } = useTasks();
+  const { projects } = useSelector((state:any) => state.projects.projects);
+  const projectInfo = projects.find((project: IProject) => project.id === project.id);
 
+  const [taskInfo, setTaskInfo] = React.useState<ITask | null>(null);
+  const task = getTaskById(id);
+  console.log('Task by ID:', task);  
   React.useEffect(() => {
-    if (!id || isNaN(taskId)) {
-      console.error("Invalid or missing Task ID:", id);
-      navigate(-1);
+    if (task) {
+      setTaskInfo(task);
+    } else {
+      console.error('Task not found');
     }
-  }, [id, taskId, navigate]);
-  // console.log(taskInfo)
+  }, [id, getTaskById]);
 
   if (!taskInfo) {
     return <div>Loading...</div>;
@@ -249,8 +250,9 @@ const TaskEditorHOC = () => {
       currentStatus={taskInfo.status}
       currentUser={taskInfo.user}
       currentFiles={taskInfo.files}
+      projectInfo={projectInfo}
     />
   );
 };
 
-export default TaskEditorHOC;
+export default TaskGroupEditorHOC;

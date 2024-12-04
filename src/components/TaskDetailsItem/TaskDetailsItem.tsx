@@ -32,9 +32,6 @@ export const TaskDetailsItem: React.FC<ITask> = ({
     files }) => {
     const dispatch:AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const { tasks, loading, error } = useSelector((state: any) => state.tasks);
-
-
     const handleEditComment = (id:number| undefined) => {
         if (!id) {
             console.error('Project ID is undefined.');

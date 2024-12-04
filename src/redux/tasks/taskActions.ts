@@ -70,7 +70,7 @@ export const deleteTasks = createAsyncThunk(
 export const createTasks = createAsyncThunk(
   'tasks/createTasks',
   async (
-    { task, projectId }: { task: { title: string; description: string; statusId: number; typeId: number; userId: number; timeAllotted: number }, projectId: string },
+    { task, projectId }: { task: { title: string; description: string; statusId: number; typeId: number; userId: number; timeAllotted: number }, projectId: string | number },
     { getState, rejectWithValue }
   ) => {
     const state: any = getState();
