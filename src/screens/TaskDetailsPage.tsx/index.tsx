@@ -13,17 +13,24 @@ import useTasks from '../../hooks/useTasks';
 
 const TaskDetailsPage = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { id, projectId } = useParams<{ id: string; projectId: string }>();
   const dispatch: AppDispatch = useDispatch();
+
 
   const { tasks, loading, error } = useSelector((state: any) => state.tasks);
   const { comments } = useSelector((state: any) => state.comments);
-
+  console.log('id' , projectId)
   const { getTaskById } = useTasks();
   const task = getTaskById(id);
   console.log(task)
 
   const commentsArray = comments?.comments || [];
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchComments({ projectId: 145, taskId: id }));
+    }
+  }, [dispatch, id]);
 
   const deleteCurrentTask = React.useCallback(() => {
     // Implement task delete logic here

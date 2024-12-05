@@ -15,6 +15,7 @@ import TaskDetailsPage from './screens/TaskDetailsPage.tsx';
 import TaskCreatorPage from './screens/TaskCreatorPage';
 import TaskEditorPage from './screens/TaskEditorPage';
 import ProjectEditorHOC from './screens/ProjectEditorPage';
+import CommentCreatorPage from './screens/CommentsCreatorPage';
 
 function App() {
  
@@ -86,8 +87,21 @@ function App() {
           <PrivateRoute> 
             <ProjectEditorHOC/>
           </PrivateRoute>
+
+          
       }
         />
+
+      <Route 
+        path="/projects/:projectId/tasks/:taskId/comments/create" 
+          element={
+          <PrivateRoute> 
+            <CommentCreatorPage/>
+          </PrivateRoute>
+
+          
+      }
+        />    z
         
       </Routes>
     </Router>
